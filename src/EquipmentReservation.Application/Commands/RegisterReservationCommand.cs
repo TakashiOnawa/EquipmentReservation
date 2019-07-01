@@ -8,7 +8,7 @@ namespace EquipmentReservation.Application.Commands
     {
         public string EquipmentId { get; set; }
         public string AccountId { get; set; }
-        public string ResavationDateFrom { get; set; }
-        public string ReservationDateTo { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 }

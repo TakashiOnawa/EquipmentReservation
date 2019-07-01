@@ -1,26 +1,29 @@
-﻿@model EquipmentReservation.Models.ReservationDetailViewModel
+﻿@model EquipmentReservation.Models.ReservationViewModel
 @{
-    ViewData["Title"] = "新規予約";
+    ViewBag.Title = "新規予約";
 }
 
 <h2>新規予約</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="NewReservation">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Purpose" class="control-label"></label>
-                <input asp-for="Purpose" class="form-control" />
-                <span asp-validation-for="Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+@using (Html.BeginForm("RegisterReservation", "Reservation"))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="NewReservation">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Purpose" class="control-label">利用目的</label>
+                    <input asp-for="Purpose" class="form-control" />
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="予約" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -24,7 +24,7 @@ namespace EquipmentReservation.Application
                 new ReservatiionId(),
                 new AccountId(command.AccountId),
                 new EquipmentId(command.EquipmentId),
-                new ReservationDateTime(DateTime.Parse(command.ResavationDateFrom), DateTime.Parse(command.ReservationDateTo)));
+                new ReservationDateTime(command.From, command.To));
 
             var reservationService = new ReservationService(_reservationRepository);
 
