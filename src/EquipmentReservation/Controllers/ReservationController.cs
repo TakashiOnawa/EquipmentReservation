@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EquipmentReservation.Application.Commands;
-using EquipmentReservation.Application.Interfaces;
+using EquipmentReservation.Application.Services.Commands;
+using EquipmentReservation.Application.Services.Interfaces;
 using EquipmentReservation.Models;
 using Microsoft.AspNetCore.Mvc;
 
