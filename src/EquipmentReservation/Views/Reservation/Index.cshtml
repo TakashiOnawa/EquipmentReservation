@@ -1,0 +1,42 @@
+﻿@model IEnumerable<EquipmentReservation.Models.ReservationDetailViewModel>
+
+@{
+    ViewBag.Title = "予約一覧";
+}
+
+<h2>予約一覧</h2>
+
+<p>
+    @Html.ActionLink(
+        "新規予約",
+        "NewReservation",
+        "Reservation",
+        new { },
+        new { @class = "btn btn-default" }
+        )
+</p>
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Purpose)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Purpose)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

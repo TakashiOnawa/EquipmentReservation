@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentReservation", "EquipmentReservation\EquipmentReservation.csproj", "{CCC013E7-CD34-487F-9763-C3DA1C009408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservation", "EquipmentReservation\EquipmentReservation.csproj", "{CCC013E7-CD34-487F-9763-C3DA1C009408}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentReservation.Domain", "EquipmentReservation.Domain\EquipmentReservation.Domain.csproj", "{7B4246B9-1FB1-4FF9-B509-6692FB9B2D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservation.Domain", "EquipmentReservation.Domain\EquipmentReservation.Domain.csproj", "{7B4246B9-1FB1-4FF9-B509-6692FB9B2D04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentReservation.Application", "EquipmentReservation.Application\EquipmentReservation.Application.csproj", "{D4233EFA-D141-4846-9FEF-A56E310F2378}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservation.Application", "EquipmentReservation.Application\EquipmentReservation.Application.csproj", "{D4233EFA-D141-4846-9FEF-A56E310F2378}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentReservation.Framework", "EquipmentReservation.Framework\EquipmentReservation.Framework.csproj", "{96095648-717E-4B25-A01F-5892F688CB2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentReservation.Framework", "EquipmentReservation.Framework\EquipmentReservation.Framework.csproj", "{96095648-717E-4B25-A01F-5892F688CB2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentReservation.Infrastructure", "EquipmentReservation.Infrastructure\EquipmentReservation.Infrastructure.csproj", "{23E41F62-E442-4D50-A4DD-96E410FBD563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{96095648-717E-4B25-A01F-5892F688CB2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96095648-717E-4B25-A01F-5892F688CB2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96095648-717E-4B25-A01F-5892F688CB2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23E41F62-E442-4D50-A4DD-96E410FBD563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23E41F62-E442-4D50-A4DD-96E410FBD563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23E41F62-E442-4D50-A4DD-96E410FBD563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23E41F62-E442-4D50-A4DD-96E410FBD563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

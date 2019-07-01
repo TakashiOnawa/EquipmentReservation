@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using EquipmentReservation.Application.Commands;
+using EquipmentReservation.Application.Interfaces;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 
 namespace EquipmentReservation.Application
 {
-    public class ReservationApplicationService
+    public class ReservationApplicationService : IReservationApplicationService
     {
         private readonly IReservationRepository _reservationRepository;
 
