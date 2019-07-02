@@ -5,7 +5,6 @@
 }
 
 <h2>予約一覧</h2>
-
 <p>
     @Html.ActionLink(
         "新規予約",
@@ -15,28 +14,29 @@
         new { @class = "btn btn-default" }
         )
 </p>
-@*<table class="table">
+<div class="row">
+    <table class="table">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Purpose)
-                </th>
-                <th></th>
+                <th>利用者名</th>
+                <th>備品</th>
+                <th>利用開始日時</th>
+                <th>利用終了日時</th>
+                <th>利用目的</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var reservation in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Purpose)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@reservation.Account.Name</td>
+                <td>@reservation.Equipment.Name</td>
+                <td></td>
+                <td></td>
+                <td>@reservation.Purpose</td>
+                @*<td>@Html.ActionLink("Detail", "Detail", "User", new { id = summary.Id }, new { @class = "btn btn-default" })</td>*@
+            </tr>
             }
         </tbody>
-    </table>*@
+    </table>
+</div>

@@ -20,7 +20,8 @@ namespace EquipmentReservation.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var reservations = new List<ReservationViewModel>();
+            return View(reservations);
         }
 
         public IActionResult NewReservation()

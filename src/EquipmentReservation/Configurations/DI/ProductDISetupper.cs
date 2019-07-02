@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EquipmentReservation.Application;
-using EquipmentReservation.Application.Interfaces;
+using EquipmentReservation.Application.Services;
+using EquipmentReservation.Application.Services.Interfaces;
 using EquipmentReservation.Domain.Reservations;
 using EquipmentReservation.Infrastructure.Domain.Reservations;
 using Microsoft.Extensions.DependencyInjection;
