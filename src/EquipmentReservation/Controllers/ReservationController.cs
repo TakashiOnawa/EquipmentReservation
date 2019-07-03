@@ -34,10 +34,10 @@ namespace EquipmentReservation.Controllers
         {
             var command = new RegisterReservationCommand()
             {
-                AccountId = model.Account.Id,
-                EquipmentId = model.Equipment.Id,
-                From = model.FromDateTime(),
-                To = model.ToDateTime()
+                AccountId = model.Account?.Id,
+                EquipmentId = model.Equipment?.Id,
+                From = model.GetFromDateTime().Value,
+                To = model.GetToDateTime().Value
             };
 
             _reservationApplicationService.RegisterReservation(command);

@@ -9,26 +9,36 @@
 @using (Html.BeginForm("RegisterReservation", "Reservation"))
 {
     <div class="row">
-        <div class="col-md-3">利用者</div>
+        <div class="col-md-1">利用者</div>
     </div>
     <div class="row">
-        <div class="col-md-3">備品</div>
+        <div class="col-md-1">備品</div>
     </div>
     <div class="row">
-        <div class="col-md-3">利用開始日付</div>
-        <div class="col-md-3">@Html.TextBoxFor(model => model.FromDate)</div>
-        <div class="col-md-3">時間</div>
-        <div class="col-md-3">@Html.TextBoxFor(model => model.FromTime)</div>
+        <div class="col-md-1">利用開始</div>
+        <div class="col-md-1">日付</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.FromDate, "{0:yyyy-MM-dd}", new { @type = "date" })
+        </div>
+        <div class="col-md-1">時間</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.FromTime, "{0:HH:mm}", new { @type = "time" })
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-3">利用終了日付</div>
-        <div class="col-md-3">@Html.TextBoxFor(model => model.ToDate)</div>
-        <div class="col-md-3">時間</div>
-        <div class="col-md-3">@Html.TextBoxFor(model => model.ToTime)</div>
+        <div class="col-md-1">利用終了</div>
+        <div class="col-md-1">日付</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.ToDate, "{0:yyyy-MM-dd}", new { @type = "date" })
+        </div>
+        <div class="col-md-1">時間</div>
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.ToTime, "{0:HH:mm}", new { @type = "time" })
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-3">利用目的</div>
-        <div class="col-md-3">@Html.TextBoxFor(model => model.Purpose)</div>
+        <div class="col-md-1">利用目的</div>
+        <div class="col-md-1">@Html.TextBoxFor(model => model.Purpose, new { @style = "width:500px;" })</div>
     </div>
     <input type="submit" class="btn btn-primary" value="予約" />
 }

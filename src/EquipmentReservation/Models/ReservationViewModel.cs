@@ -11,20 +11,26 @@ namespace EquipmentReservation.Models
         public string Id { get; set; }
         public EquipmentViewModel Equipment { get; set; }
         public AccountViewModel Account { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime FromTime { get; set; }
-        public DateTime ToDate { get; set; }
-        public DateTime ToTime { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? FromTime { get; set; }
+        public DateTime? ToDate { get; set; }
+        public DateTime? ToTime { get; set; }
         public string Purpose { get; set; }
 
-        public DateTime FromDateTime()
+        public DateTime? GetFromDateTime()
         {
-            return FromDate;
+            return CombineDateTime(FromDate, FromTime);
         }
 
-        public DateTime ToDateTime()
+        public DateTime? GetToDateTime()
         {
-            return ToDate;
+            return CombineDateTime(ToDate, ToTime);
+        }
+
+        private DateTime? CombineDateTime(DateTime? date, DateTime? time)
+        {
+            if (!date.HasValue || !time.HasValue) return null;
+            return date.Value.Date + time.Value.TimeOfDay;
         }
     }
 }
