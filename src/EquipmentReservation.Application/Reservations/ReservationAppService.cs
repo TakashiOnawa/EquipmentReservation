@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EquipmentReservation.Application.Services.Commands;
-using EquipmentReservation.Application.Services.Interfaces;
+using EquipmentReservation.Application.Reservations.Commands;
+using EquipmentReservation.Application.Reservations.Data;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 
-namespace EquipmentReservation.Application.Services
+namespace EquipmentReservation.Application.Reservations
 {
-    public class ReservationApplicationService : IReservationApplicationService
+    public class ReservationAppService : IReservationAppService
     {
         private readonly IReservationRepository _reservationRepository;
 
-        public ReservationApplicationService(IReservationRepository reservationRepository)
+        public ReservationAppService(IReservationRepository reservationRepository)
         {
             _reservationRepository = reservationRepository ?? throw new ArgumentNullException(nameof(reservationRepository));
         }

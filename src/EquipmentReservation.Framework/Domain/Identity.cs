@@ -8,15 +8,15 @@ namespace EquipmentReservation.Framework.Domain
     {
         public Identity()
         {
-            this.Id = Guid.NewGuid().ToString();
+            this.Value = Guid.NewGuid().ToString();
         }
 
         public Identity(string id)
         {
-            this.Id = id;
+            this.Value = id;
         }
 
-        public string Id { get; private set; }
+        public string Value { get; private set; }
 
         public override bool Equals(object obj)
         {
@@ -26,12 +26,12 @@ namespace EquipmentReservation.Framework.Domain
         public bool Equals(Identity other)
         {
             return other != null &&
-                   Id == other.Id;
+                   Value == other.Value;
         }
 
         public override int GetHashCode()
         {
-            return 2108858624 + EqualityComparer<string>.Default.GetHashCode(Id);
+            return 2108858624 + EqualityComparer<string>.Default.GetHashCode(Value);
         }
 
         public static bool operator ==(Identity identity1, Identity identity2)

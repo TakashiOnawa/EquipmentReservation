@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EquipmentReservation.Models.ReservationViewModel>
+﻿@model IEnumerable<EquipmentReservation.Application.Reservations.Data.ReservationData>
 
 @{
     ViewBag.Title = "予約一覧";
@@ -18,7 +18,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>利用者名</th>
+                <th>利用者</th>
                 <th>備品</th>
                 <th>利用開始日時</th>
                 <th>利用終了日時</th>
@@ -29,10 +29,10 @@
             @foreach (var reservation in Model)
             {
             <tr>
-                <td>@reservation.Account.Name</td>
-                <td>@reservation.Equipment.Name</td>
-                <td></td>
-                <td></td>
+                <td>@reservation.AccountName</td>
+                <td>@reservation.EquipmentName</td>
+                <td>@reservation.FromDateTime</td>
+                <td>@reservation.ToDateTime</td>
                 <td>@reservation.Purpose</td>
                 @*<td>@Html.ActionLink("Detail", "Detail", "User", new { id = summary.Id }, new { @class = "btn btn-default" })</td>*@
             </tr>

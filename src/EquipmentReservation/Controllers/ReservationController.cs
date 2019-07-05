@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EquipmentReservation.Application.Services.Commands;
-using EquipmentReservation.Application.Services.Interfaces;
+using EquipmentReservation.Application.Accounts;
+using EquipmentReservation.Application.Equipments;
+using EquipmentReservation.Application.Reservations;
+using EquipmentReservation.Application.Reservations.Commands;
 using EquipmentReservation.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +13,38 @@ namespace EquipmentReservation.Controllers
 {
     public class ReservationController : Controller
     {
-        private readonly IReservationApplicationService _reservationApplicationService;
+        private readonly IReservationAppService _reservationAppService;
+        private readonly IReservationQueryService _reservationQueryService;
+        private readonly IAccountAppService _accountAppService;
+        private readonly IEquipmentAppService _equipmentAppService;
 
-        public ReservationController(IReservationApplicationService reservationApplicationService)
+        public ReservationController(
+            IReservationAppService reservationAppService, 
+            IReservationQueryService reservationQueryService,
+            IAccountAppService accountAppService,
+            IEquipmentAppService equipmentAppService)
         {
-            _reservationApplicationService = reservationApplicationService;
+            _reservationAppService = reservationAppService;
+            _reservationQueryService = reservationQueryService;
+            _accountAppService = accountAppService;
+            _equipmentAppService = equipmentAppService;
         }
 
         public IActionResult Index()
         {
-            var reservations = new List<ReservationViewModel>();
+            var reservations = _reservationQueryService.GetAllReservation();
             return View(reservations);
         }
 
         public IActionResult NewReservation()
         {
-            return View();
+            var reservation = new ReservationViewModel()
+            {
+                AccountList = _accountAppService.GetAllAccount(),
+                EquipmentList = _equipmentAppService.GetAllEquipment()
+            };
+
+            return View(reservation);
         }
 
         [HttpPost]
@@ -34,13 +52,13 @@ namespace EquipmentReservation.Controllers
         {
             var command = new RegisterReservationCommand()
             {
-                AccountId = model.Account?.Id,
-                EquipmentId = model.Equipment?.Id,
+                AccountId = model.SelectedAccountId,
+                EquipmentId = model.SelectedEquipmentId,
                 From = model.GetFromDateTime().Value,
                 To = model.GetToDateTime().Value
             };
 
-            _reservationApplicationService.RegisterReservation(command);
+            _reservationAppService.RegisterReservation(command);
 
             return Redirect("Index");
         }

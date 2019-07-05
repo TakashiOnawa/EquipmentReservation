@@ -4,7 +4,7 @@ using System.Text;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 
-namespace EquipmentReservation.Infrastructure.Domain.Reservations
+namespace EquipmentReservation.Infrastructure.Domain.Repositories
 {
     public class ReservationRepository : IReservationRepository
     {

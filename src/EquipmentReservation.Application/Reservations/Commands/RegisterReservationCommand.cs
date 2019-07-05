@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EquipmentReservation.Application.Services.Commands
+namespace EquipmentReservation.Application.Reservations.Commands
 {
     public class RegisterReservationCommand
     {
