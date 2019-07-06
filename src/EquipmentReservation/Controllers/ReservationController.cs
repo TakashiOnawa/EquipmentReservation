@@ -6,6 +6,7 @@ using EquipmentReservation.Application.Accounts;
 using EquipmentReservation.Application.Equipments;
 using EquipmentReservation.Application.Reservations;
 using EquipmentReservation.Application.Reservations.Commands;
+using EquipmentReservation.Application.Reservations.Exceptions;
 using EquipmentReservation.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,27 +39,40 @@ namespace EquipmentReservation.Controllers
 
         public IActionResult NewReservation()
         {
-            var reservation = new ReservationViewModel()
-            {
-                AccountList = _accountAppService.GetAllAccount(),
-                EquipmentList = _equipmentAppService.GetAllEquipment()
-            };
-
-            return View(reservation);
+            var model = new ReservationViewModel();
+            model.AccountList = _accountAppService.GetAllAccount();
+            model.EquipmentList = _equipmentAppService.GetAllEquipment();
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult RegisterReservation(ReservationViewModel model)
+        public IActionResult NewReservation(ReservationViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                model.AccountList = _accountAppService.GetAllAccount();
+                model.EquipmentList = _equipmentAppService.GetAllEquipment();
+                ModelState.AddModelError(string.Empty, "入力内容が不正です。");
+                return View(model);
+            }
+
             var command = new RegisterReservationCommand()
             {
                 AccountId = model.SelectedAccountId,
                 EquipmentId = model.SelectedEquipmentId,
-                From = model.GetFromDateTime().Value,
-                To = model.GetToDateTime().Value
+                StartDateTime = model.GetStartDateTime().Value,
+                EndDateTime = model.GetEndDateTime().Value,
+                PurposeOfUse = model.PurposeOfUse
             };
 
-            _reservationAppService.RegisterReservation(command);
+            try
+            {
+                _reservationAppService.RegisterReservation(command);
+            }
+            catch (ReservationDupulicationException)
+            {
+                ModelState.AddModelError(string.Empty, "予約が重複しています。");
+            }
 
             return Redirect("Index");
         }

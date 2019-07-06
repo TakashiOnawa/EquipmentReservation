@@ -8,12 +8,13 @@ namespace EquipmentReservation.Framework.Domain
     {
         public Identity()
         {
-            this.Value = Guid.NewGuid().ToString();
+            Value = Guid.NewGuid().ToString();
         }
 
         public Identity(string id)
         {
-            this.Value = id;
+            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+            Value = id;
         }
 
         public string Value { get; private set; }

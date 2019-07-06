@@ -8,7 +8,8 @@ namespace EquipmentReservation.Domain.Accounts
     {
         public AccountName(string name)
         {
-            Value = name ?? throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            Value = name;
         }
 
         public string Value { get; private set; }

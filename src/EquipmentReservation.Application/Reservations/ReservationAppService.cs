@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using EquipmentReservation.Application.Reservations.Commands;
 using EquipmentReservation.Application.Reservations.Data;
+using EquipmentReservation.Application.Reservations.Exceptions;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
@@ -24,13 +25,14 @@ namespace EquipmentReservation.Application.Reservations
                 new ReservatiionId(),
                 new AccountId(command.AccountId),
                 new EquipmentId(command.EquipmentId),
-                new ReservationDateTime(command.From, command.To));
+                new ReservationDateTime(command.StartDateTime, command.EndDateTime),
+                new PurposeOfUse(command.PurposeOfUse));
 
-            var reservationService = new ReservationService(_reservationRepository);
+            var service = new ReservationService(_reservationRepository);
 
-            if (reservationService.IsDupulicateReservation(reservation))
+            if (service.IsDupulicateReservation(reservation))
             {
-                // Error
+                throw new ReservationDupulicationException();
             }
 
             _reservationRepository.Save(reservation);

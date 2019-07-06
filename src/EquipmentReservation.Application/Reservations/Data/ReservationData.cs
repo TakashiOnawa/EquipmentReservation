@@ -12,8 +12,8 @@ namespace EquipmentReservation.Application.Reservations.Data
         public string EquipmentName { get; set; }
         public string AccountId { get; set; }
         public string AccountName { get; set; }
-        public DateTime FromDateTime { get; set; }
-        public DateTime ToDateTime { get; set; }
-        public string Purpose { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public string PurposeOfUse { get; set; }
     }
 }

@@ -12,26 +12,36 @@ namespace EquipmentReservation.Models
     public class ReservationViewModel
     {
         public string Id { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? FromTime { get; set; }
-        public DateTime? ToDate { get; set; }
-        public DateTime? ToTime { get; set; }
-        public string Purpose { get; set; }
 
+        [Required(ErrorMessage = "利用者は必須入力です。")]
         public string SelectedAccountId { get; set; }
         public IEnumerable<AccountData> AccountList { get; set; }
 
+        [Required(ErrorMessage = "備品は必須入力です。")]
         public string SelectedEquipmentId { get; set; }
         public IEnumerable<EquipmentData> EquipmentList { get; set; }
 
-        public DateTime? GetFromDateTime()
+        [Required(ErrorMessage = "利用開始日付は必須入力です。")]
+        public DateTime? StartDate { get; set; }
+        [Required(ErrorMessage = "利用開始時間は必須入力です。")]
+        public DateTime? StartTime { get; set; }
+
+        [Required(ErrorMessage = "利用終了日付は必須入力です。")]
+        public DateTime? EndDate { get; set; }
+        [Required(ErrorMessage = "利用終了時間は必須入力です。")]
+        public DateTime? EndTime { get; set; }
+
+        [StringLength(64, ErrorMessage = "利用目的は {1} 文字以内で入力してください。")]
+        public string PurposeOfUse { get; set; }
+
+        public DateTime? GetStartDateTime()
         {
-            return CombineDateTime(FromDate, FromTime);
+            return CombineDateTime(StartDate, StartTime);
         }
 
-        public DateTime? GetToDateTime()
+        public DateTime? GetEndDateTime()
         {
-            return CombineDateTime(ToDate, ToTime);
+            return CombineDateTime(EndDate, EndTime);
         }
 
         private DateTime? CombineDateTime(DateTime? date, DateTime? time)
