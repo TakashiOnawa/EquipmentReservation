@@ -7,6 +7,7 @@ using EquipmentReservation.Application.Equipments;
 using EquipmentReservation.Application.Reservations;
 using EquipmentReservation.Application.Reservations.Commands;
 using EquipmentReservation.Application.Reservations.Exceptions;
+using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,32 +17,32 @@ namespace EquipmentReservation.Controllers
     {
         private readonly IReservationAppService _reservationAppService;
         private readonly IReservationQueryService _reservationQueryService;
-        private readonly IAccountAppService _accountAppService;
-        private readonly IEquipmentAppService _equipmentAppService;
+        private readonly IAccountQueryService _accountQueryService;
+        private readonly IEquipmentQueryService _equipmentQueryService;
 
         public ReservationController(
             IReservationAppService reservationAppService, 
             IReservationQueryService reservationQueryService,
-            IAccountAppService accountAppService,
-            IEquipmentAppService equipmentAppService)
+            IAccountQueryService accountQueryService,
+            IEquipmentQueryService equipmentQueryService)
         {
             _reservationAppService = reservationAppService;
             _reservationQueryService = reservationQueryService;
-            _accountAppService = accountAppService;
-            _equipmentAppService = equipmentAppService;
+            _accountQueryService = accountQueryService;
+            _equipmentQueryService = equipmentQueryService;
         }
 
         public IActionResult Index()
         {
-            var reservations = _reservationQueryService.GetAllReservation();
+            var reservations = _reservationQueryService.GetAllReservationListData().ReservationListDataList;
             return View(reservations);
         }
 
         public IActionResult NewReservation()
         {
             var model = new ReservationViewModel();
-            model.AccountList = _accountAppService.GetAllAccount();
-            model.EquipmentList = _equipmentAppService.GetAllEquipment();
+            model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+            model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
             return View(model);
         }
 
@@ -50,13 +51,13 @@ namespace EquipmentReservation.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.AccountList = _accountAppService.GetAllAccount();
-                model.EquipmentList = _equipmentAppService.GetAllEquipment();
+                model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+                model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
                 ModelState.AddModelError(string.Empty, "入力内容が不正です。");
                 return View(model);
             }
 
-            var command = new RegisterReservationCommand()
+            var command = new RegisterReservationRequest()
             {
                 AccountId = model.SelectedAccountId,
                 EquipmentId = model.SelectedEquipmentId,
@@ -71,10 +72,68 @@ namespace EquipmentReservation.Controllers
             }
             catch (ReservationDupulicationException)
             {
+                model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+                model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
                 ModelState.AddModelError(string.Empty, "予約が重複しています。");
+                return View(model);
             }
 
-            return Redirect("Index");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult EditReservation(string id)
+        {
+            var request = new GetReservationListDataRequest() { ReservationId = id };
+            var response = _reservationQueryService.GetReservationListData(request);
+
+            var model = new ReservationViewModel();
+            model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+            model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
+            model.Id = response.ReservationListData.Id;
+            model.SelectedAccountId = response.ReservationListData.AccountId;
+            model.SelectedEquipmentId = response.ReservationListData.EquipmentId;
+            model.StartDate = response.ReservationListData.StartDateTime;
+            model.StartTime = response.ReservationListData.StartDateTime;
+            model.EndDate = response.ReservationListData.EndDateTime;
+            model.EndTime = response.ReservationListData.EndDateTime;
+            model.PurposeOfUse = response.ReservationListData.PurposeOfUse;
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditReservation(ReservationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+                model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
+                ModelState.AddModelError(string.Empty, "入力内容が不正です。");
+                return View(model);
+            }
+
+            var command = new ChangeReservationInfoRequest()
+            {
+                Id = model.Id,
+                AccountId = model.SelectedAccountId,
+                EquipmentId = model.SelectedEquipmentId,
+                StartDateTime = model.GetStartDateTime().Value,
+                EndDateTime = model.GetEndDateTime().Value,
+                PurposeOfUse = model.PurposeOfUse
+            };
+
+            try
+            {
+                _reservationAppService.ChangeReservationInfo(command);
+            }
+            catch (ReservationDupulicationException)
+            {
+                model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+                model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
+                ModelState.AddModelError(string.Empty, "予約が重複しています。");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

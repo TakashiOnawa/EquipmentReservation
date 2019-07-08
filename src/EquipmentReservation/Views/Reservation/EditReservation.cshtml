@@ -1,0 +1,19 @@
+﻿@model EquipmentReservation.Models.ReservationViewModel
+@{
+    ViewBag.Title = "予約変更";
+}
+
+<h2>予約変更</h2>
+
+@using (Html.BeginForm("EditReservation", "Reservation"))
+{
+    @Html.Partial("_ReservationPartial", Model)
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

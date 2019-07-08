@@ -15,11 +15,5 @@ namespace EquipmentReservation.Application.Equipments
         {
             _equipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
         }
-
-        public IEnumerable<EquipmentData> GetAllEquipment()
-        {
-            return _equipmentRepository.FindAll().
-                Select(_ => new EquipmentData() { Id = _.Id.Value, Name = _.Name.Value, Type = (int)_.EquipmentType }).ToArray();
-        }
     }
 }

@@ -5,7 +5,7 @@ using EquipmentReservation.Application;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class QueryableRepository : IQueryableRepository
+    class QueryableRepository
     {
         public T QueryObject<T>(string query, params object[] arguments)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EquipmentReservation.Framework.Domain;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace EquipmentReservation.Domain.Reservations
     {
         public ReservationDateTime(DateTime start, DateTime end)
         {
-            if (start.CompareTo(end) <= 0) throw new ArgumentException("終了時間は開始時間よりも後の時間にしてください。");
+            if (start.CompareTo(end) >= 0) throw new ArgumentException("終了時間は開始時間よりも後の時間にしてください。");
             Start = start;
             End = end;
         }
@@ -18,13 +19,11 @@ namespace EquipmentReservation.Domain.Reservations
 
         public bool IsRangeOverlapping(ReservationDateTime other)
         {
-            if (other == null) throw new ArgumentNullException(nameof(other));
+            Assertion.ArgumentNotNull(other, nameof(other));
             var compareResultStart = Start.CompareTo(other.Start);
             var compareResultEnd = End.CompareTo(other.End);
 
-            if (compareResultStart <= 0 && compareResultEnd <= 0) return true;
-            if (compareResultStart >= 0 && compareResultEnd >= 0) return true;
-            return false;
+            return Start.CompareTo(other.End) < 0 && other.Start.CompareTo(End) < 0; 
         }
 
         public override bool Equals(object obj)

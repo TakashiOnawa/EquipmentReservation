@@ -7,6 +7,5 @@ namespace EquipmentReservation.Application.Equipments
 {
     public interface IEquipmentAppService
     {
-        IEnumerable<EquipmentData> GetAllEquipment();
     }
 }

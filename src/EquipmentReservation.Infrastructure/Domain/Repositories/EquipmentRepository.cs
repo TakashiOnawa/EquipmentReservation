@@ -7,16 +7,16 @@ namespace EquipmentReservation.Infrastructure.Domain.Repositories
 {
     public class EquipmentRepository : IEquipmentRepository
     {
-        private readonly List<Equipment> _data = new List<Equipment>();
+        public static List<Equipment> _data = new List<Equipment>();
 
-        public EquipmentRepository()
+        static EquipmentRepository()
         {
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.USB, new EquipmentName("USB1")));
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.USB, new EquipmentName("USB2")));
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.PocketWifi, new EquipmentName("ポケットWifi1")));
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.PocketWifi, new EquipmentName("ポケットWifi2")));
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.CellPhone, new EquipmentName("携帯電話1")));
-            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.CellPhone, new EquipmentName("携帯電話2")));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.USB, "USB1"));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.USB, "USB2"));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.PocketWifi, "ポケットWifi1"));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.PocketWifi, "ポケットWifi2"));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.CellPhone, "携帯電話1"));
+            _data.Add(new Equipment(new EquipmentId(), EquipmentTypes.CellPhone, "携帯電話2"));
         }
 
         public IEnumerable<Equipment> FindAll()

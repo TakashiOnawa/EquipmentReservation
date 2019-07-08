@@ -4,8 +4,9 @@ using System.Text;
 
 namespace EquipmentReservation.Application.Reservations.Commands
 {
-    public class RegisterReservationCommand
+    public class ChangeReservationInfoRequest
     {
+        public string Id { get; set; }
         public string EquipmentId { get; set; }
         public string AccountId { get; set; }
         public DateTime StartDateTime { get; set; }

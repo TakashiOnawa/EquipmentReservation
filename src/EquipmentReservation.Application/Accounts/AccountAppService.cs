@@ -15,11 +15,5 @@ namespace EquipmentReservation.Application.Accounts
         {
             _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         }
-
-        public IEnumerable<AccountData> GetAllAccount()
-        {
-            return _accountRepository.FindAll().
-                Select(_ => new AccountData() { Id = _.Id.Value, Name = _.Name.Value }).ToArray();
-        }
     }
 }

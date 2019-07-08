@@ -38,7 +38,7 @@ namespace EquipmentReservation.Models
         {
             return CombineDateTime(StartDate, StartTime);
         }
-
+       
         public DateTime? GetEndDateTime()
         {
             return CombineDateTime(EndDate, EndTime);

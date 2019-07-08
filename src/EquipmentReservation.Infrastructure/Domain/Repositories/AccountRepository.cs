@@ -7,13 +7,13 @@ namespace EquipmentReservation.Infrastructure.Domain.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly List<Account> _data = new List<Account>();
+        public static readonly List<Account> _data = new List<Account>();
 
-        public AccountRepository()
+        static AccountRepository()
         {
-            _data.Add(new Account(new AccountId(), new AccountName("アカウント1")));
-            _data.Add(new Account(new AccountId(), new AccountName("アカウント2")));
-            _data.Add(new Account(new AccountId(), new AccountName("アカウント3")));
+            _data.Add(new Account(new AccountId(), "アカウント1"));
+            _data.Add(new Account(new AccountId(), "アカウント2"));
+            _data.Add(new Account(new AccountId(), "アカウント3"));
         }
 
         public IEnumerable<Account> FindAll()

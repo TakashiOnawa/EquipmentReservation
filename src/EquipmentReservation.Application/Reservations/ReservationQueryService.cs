@@ -2,40 +2,42 @@
 using System.Collections.Generic;
 using System.Text;
 using EquipmentReservation.Application.Reservations.Data;
+using EquipmentReservation.Application.Reservations.Queries;
+using EquipmentReservation.Domain.Reservations;
 
 namespace EquipmentReservation.Application.Reservations
 {
     public class ReservationQueryService : IReservationQueryService
     {
-        private readonly IQueryableRepository _queryableRepository;
+        private readonly IReservationDataQuery _reservationDataQuery;
 
-        public ReservationQueryService(IQueryableRepository queryableRepository)
+        public ReservationQueryService(IReservationDataQuery reservationDataQuery)
         {
-            _queryableRepository = queryableRepository ?? throw new ArgumentNullException(nameof(queryableRepository));
+            _reservationDataQuery = reservationDataQuery ?? throw new ArgumentNullException(nameof(reservationDataQuery));
         }
 
-        public IEnumerable<ReservationData> GetAllReservation()
+        public GetReservationDataResponse GetReservationData(GetReservationDataRequest request)
         {
-            var query = @"
-                select
-                    reservation.RESERVATION_KEY as Id,
-                    equipment.EQUIPMENT_KEY as EquipmentId,
-                    equipment.EQUIPMENT_TYPE as EquipmentType,
-                    equipment.NAME as EquipmentName,
-                    account.ACCOUNT_KEY as AccuntId,
-                    account.NAME as AccountName,
-                    reservation.START_DATE_TIME as StartDateTime,
-                    reservation.END_DATE_TIME as EndDateTime,
-                    reservation.PURPOSE_OF_USE as PurposeOfUse
-                from
-                    T_RESERVATION reservation
-                    join M_ACCOUNT account on reservation.ACCOUNT_KEY = account.ACCOUNT_KEY,
-                    join M_EQUIPMENT equipment on reservation.EQUIPMENT_KEY = equipment.EQUIPMENT_KEY
-                order by
-                    reservation.START_DATE_TIME,
-                    reservation.RESERVATION_KEY
-                ";
-            return _queryableRepository.QueryObjects<ReservationData>(query);
+            return new GetReservationDataResponse()
+            {
+                ReservationData = _reservationDataQuery.FindReservationData(new ReservationId(request.ReservationId))
+            };
+        }
+
+        public GetAllReservationListDataResponse GetAllReservationListData()
+        {
+            return new GetAllReservationListDataResponse()
+            {
+                ReservationListDataList = _reservationDataQuery.FindAllReservationListData()
+            };
+        }
+
+        public GetReservationListDataResponse GetReservationListData(GetReservationListDataRequest request)
+        {
+            return new GetReservationListDataResponse()
+            {
+                ReservationListData = _reservationDataQuery.FindReservationListData(new ReservationId(request.ReservationId))
+            };
         }
     }
 }

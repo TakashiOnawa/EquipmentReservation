@@ -7,6 +7,7 @@ namespace EquipmentReservation.Application.Reservations
 {
     public interface IReservationAppService
     {
-        void RegisterReservation(RegisterReservationCommand command);
+        void RegisterReservation(RegisterReservationRequest request);
+        void ChangeReservationInfo(ChangeReservationInfoRequest request);
     }
 }

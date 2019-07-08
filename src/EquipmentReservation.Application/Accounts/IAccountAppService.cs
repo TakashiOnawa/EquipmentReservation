@@ -8,6 +8,5 @@ namespace EquipmentReservation.Application.Accounts
 {
     public interface IAccountAppService
     {
-        IEnumerable<AccountData> GetAllAccount();
     }
 }

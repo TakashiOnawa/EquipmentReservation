@@ -13,7 +13,7 @@ namespace EquipmentReservation.Framework.Domain
 
         public Identity(string id)
         {
-            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+            Assertion.ArgumentNotNullOrEmpty(id, nameof(id));
             Value = id;
         }
 
