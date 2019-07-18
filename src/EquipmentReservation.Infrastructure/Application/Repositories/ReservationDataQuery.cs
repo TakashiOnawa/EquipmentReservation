@@ -1,6 +1,9 @@
-﻿using EquipmentReservation.Application.Reservations.Data;
+﻿using Dapper;
+using EquipmentReservation.Application.Reservations.Data;
 using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Reservations;
+using EquipmentReservation.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,13 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
     public class ReservationDataQuery : IReservationDataQuery
     {
+        private readonly MyDbContext _dbContext;
+
+        public ReservationDataQuery(MyDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
         private string GetQuery(string baseQuery, string whereClause = null)
         {
             return string.Format(baseQuery, whereClause);
@@ -17,106 +27,67 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         private const string GetReservationDataQuery = @"
                 select
-                    reservation.RESERVATION_KEY as Id,
-                    reservation.ACCOUNT_KEY as AccuntId,
-                    reservation.EQUIPMENT_KEY as EquipmentId,
-                    reservation.START_DATE_TIME as StartDateTime,
-                    reservation.END_DATE_TIME as EndDateTime,
-                    reservation.PURPOSE_OF_USE as PurposeOfUse
+                    id as Id,
+                    accounts_id as AccuntId,
+                    equipments_id as EquipmentId,
+                    start_date_time as StartDateTime,
+                    end_date_time as EndDateTime,
+                    purpose_of_use as PurposeOfUse
                 from
-                    T_RESERVATION reservation
+                    reservations
                 {0}
                 order by
-                    reservation.START_DATE_TIME,
-                    reservation.RESERVATION_KEY;
+                    start_date_time,
+                    end_date_time;
                 ";
 
         public IEnumerable<ReservationData> FindAllReservationData()
         {
-            var reservationDataList = new List<ReservationData>();
-            foreach (var reservation in Domain.Repositories.ReservationRepository._data)
-            {
-                reservationDataList.Add(new ReservationData()
-                {
-                    Id = reservation.Id.Value,
-                    AccountId = reservation.AccountId.Value,
-                    EquipmentId = reservation.EquipmentId.Value,
-                    StartDateTime = reservation.ReservationDateTime.Start,
-                    EndDateTime = reservation.ReservationDateTime.End,
-                    PurposeOfUse = reservation.PurposeOfUse
-                });
-            }
-            return reservationDataList;
-
-            return new QueryableRepository().QueryObjects<ReservationData>(GetQuery(GetReservationDataQuery));
+            return _dbContext.Database.GetDbConnection().Query<ReservationData>(GetQuery(GetReservationDataQuery));
         }
 
         public ReservationData FindReservationData(ReservationId reservationId)
         {
-            return FindAllReservationListData().FirstOrDefault(_ => _.Id == reservationId.Value);
+            var whereClause = @"where id = @id";
 
-            var whereClause = @"
-                where
-                    reservation.RESERVATION_KEY = ?";
+            var parameter = new { id = reservationId.Value };
 
-            return new QueryableRepository().QueryObject<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), reservationId.Value);
+            return _dbContext.Database.GetDbConnection().Query<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), parameter).FirstOrDefault();
         }
 
         private const string GetReservationListDataQuery = @"
                 select
-                    reservation.RESERVATION_KEY as Id,
-                    reservation.ACCOUNT_KEY as AccuntId,
-                    account.NAME as AccountName,
-                    reservation.EQUIPMENT_KEY as EquipmentId,
-                    equipment.EQUIPMENT_TYPE as EquipmentType,
-                    equipment.NAME as EquipmentName,
-                    reservation.START_DATE_TIME as StartDateTime,
-                    reservation.END_DATE_TIME as EndDateTime,
-                    reservation.PURPOSE_OF_USE as PurposeOfUse
+                    reservation.id as Id,
+                    reservation.accounts_id as AccountId,
+                    reservation.equipments_id as EquipmentId,
+                    reservation.start_date_time as StartDateTime,
+                    reservation.end_date_time as EndDateTime,
+                    reservation.purpose_of_use as PurposeOfUse,
+                    account.account_name as AccountName,
+                    equipment.equipment_type as EquipmentType,
+                    equipment.equipment_name as EquipmentName
                 from
-                    T_RESERVATION reservation
-                    join M_ACCOUNT account on reservation.ACCOUNT_KEY = account.ACCOUNT_KEY,
-                    join M_EQUIPMENT equipment on reservation.EQUIPMENT_KEY = equipment.EQUIPMENT_KEY
+                    reservations reservation
+                    inner join accounts account on reservation.accounts_id = account.id
+                    inner join equipments equipment on reservation.equipments_id = equipment.id
                 {0}
                 order by
-                    reservation.START_DATE_TIME,
-                    reservation.RESERVATION_KEY;
+                    reservation.start_date_time,
+                    reservation.end_date_time;
                 ";
 
         public IEnumerable<ReservationListData> FindAllReservationListData()
         {
-            var reservationListDataList = new List<ReservationListData>();
-            foreach(var reservation in Domain.Repositories.ReservationRepository._data)
-            {
-                var account = Domain.Repositories.AccountRepository._data.Find(_ => _.Id.Equals(reservation.AccountId));
-                var equipment = Domain.Repositories.EquipmentRepository._data.Find(_ => _.Id.Equals(reservation.EquipmentId));
-                reservationListDataList.Add(new ReservationListData()
-                {
-                    Id = reservation.Id.Value,
-                    AccountId = reservation.AccountId.Value,
-                    AccountName = account.Name,
-                    EquipmentId = reservation.EquipmentId.Value,
-                    EquipmentType = (int)equipment.EquipmentType,
-                    EquipmentName = equipment.Name,
-                    StartDateTime = reservation.ReservationDateTime.Start,
-                    EndDateTime = reservation.ReservationDateTime.End,
-                    PurposeOfUse = reservation.PurposeOfUse
-                });
-            }
-            return reservationListDataList;
-
-            return new QueryableRepository().QueryObjects<ReservationListData>(GetQuery(GetReservationListDataQuery));
+            return _dbContext.Database.GetDbConnection().Query<ReservationListData>(GetQuery(GetReservationListDataQuery));
         }
 
         public ReservationListData FindReservationListData(ReservationId reservationId)
         {
-            return FindAllReservationListData().FirstOrDefault(_ => _.Id == reservationId.Value);
+            var whereClause = @"where reservation.id = @id";
 
-            var whereClause = @"
-                where
-                    reservation.RESERVATION_KEY = ?";
+            var parameter = new { id = reservationId.Value };
 
-            return new QueryableRepository().QueryObject<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), reservationId.Value);
+            return _dbContext.Database.GetDbConnection().Query<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), parameter).FirstOrDefault();
         }
     }
 }

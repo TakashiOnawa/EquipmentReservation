@@ -1,5 +1,8 @@
-﻿using EquipmentReservation.Application.Accounts.Data;
+﻿using Dapper;
+using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Accounts.Queries;
+using EquipmentReservation.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +11,13 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
     public class AccountDataQuery : IAccountDataQuery
     {
+        private readonly MyDbContext _dbContext;
+
+        public AccountDataQuery(MyDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
         private string GetQuery(string baseQuery, string whereClause = null)
         {
             return string.Format(baseQuery, whereClause);
@@ -15,30 +25,18 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         private const string GetAccountDataQuery = @"
                 select
-                    account.ACCOUNT_KEY as Id,
-                    account.NAME as Name
+                    id as Id,
+                    account_name as AccountName
                 from
-                    M_ACCOUNT account
+                    accounts
                 {0}
                 order by
-                    account.NAME;
+                    account_name;
                 ";
 
         public IEnumerable<AccountData> GetAccountData()
         {
-            var accountDataList = new List<AccountData>();
-            foreach(var account in Domain.Repositories.AccountRepository._data)
-            {
-                accountDataList.Add(new AccountData()
-                {
-                    Id = account.Id.Value,
-                    Name = account.Name
-                });
-            }
-
-            return accountDataList;
-
-            return new QueryableRepository().QueryObjects<AccountData>(GetQuery(GetAccountDataQuery));
+            return _dbContext.Database.GetDbConnection().Query<AccountData>(GetQuery(GetAccountDataQuery));
         }
 
     }

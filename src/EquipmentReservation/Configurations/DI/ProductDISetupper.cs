@@ -12,7 +12,9 @@ using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 using EquipmentReservation.Infrastructure.Application.Repositories;
+using EquipmentReservation.Infrastructure.Database;
 using EquipmentReservation.Infrastructure.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EquipmentReservation.Configurations.DI
@@ -21,18 +23,19 @@ namespace EquipmentReservation.Configurations.DI
     {
         public void Setup(IServiceCollection services)
         {
-            services.AddSingleton<IReservationRepository, ReservationRepository>();
-            services.AddSingleton<IReservationDataQuery, ReservationDataQuery>();
-            services.AddSingleton<IAccountRepository, AccountRepository>();
-            services.AddSingleton<IAccountDataQuery, AccountDataQuery>();
-            services.AddSingleton<IEquipmentRepository, EquipmentRepository>();
-            services.AddSingleton<IEquipmentDataQuery, EquipmentDataQuery>();
-            services.AddSingleton<IReservationAppService, ReservationAppService>();
-            services.AddSingleton<IReservationQueryService, ReservationQueryService>();
-            services.AddSingleton<IAccountAppService, AccountAppService>();
-            services.AddSingleton<IAccountQueryService, AccountQueryService>();
-            services.AddSingleton<IEquipmentAppService, EquipmentAppService>();
-            services.AddSingleton<IEquipmentQueryService, EquipmentQueryService>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IReservationDataQuery, ReservationDataQuery>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountDataQuery, AccountDataQuery>();
+            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IEquipmentDataQuery, EquipmentDataQuery>();
+            services.AddScoped<IReservationAppService, ReservationAppService>();
+            services.AddScoped<IReservationQueryService, ReservationQueryService>();
+            services.AddScoped<IAccountAppService, AccountAppService>();
+            services.AddScoped<IAccountQueryService, AccountQueryService>();
+            services.AddScoped<IEquipmentAppService, EquipmentAppService>();
+            services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+            services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=J5100560;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
         }
     }
 }

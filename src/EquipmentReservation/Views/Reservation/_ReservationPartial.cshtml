@@ -6,12 +6,12 @@
 
 <div class="form-group">
     <label>利用者</label>
-    @Html.DropDownListFor(model => model.SelectedAccountId, new SelectList(Model.AccountList, "Id", "Name", 1), "-- 選択してください --", new { @class = "form-control" })
+    @Html.DropDownListFor(model => model.SelectedAccountId, new SelectList(Model.AccountList, "Id", "AccountName", 1), "-- 選択してください --", new { @class = "form-control" })
     <span asp-validation-for="SelectedAccountId" class="text-danger"></span>
 </div>
 <div class="form-group">
     <label>備品</label>
-    @Html.DropDownListFor(model => model.SelectedEquipmentId, new SelectList(Model.EquipmentList, "Id", "Name", 1), "-- 選択してください --", new { @class = "form-control" })
+    @Html.DropDownListFor(model => model.SelectedEquipmentId, new SelectList(Model.EquipmentList, "Id", "EquipmentName", 1), "-- 選択してください --", new { @class = "form-control" })
     <span asp-validation-for="SelectedEquipmentId" class="text-danger"></span>
 </div>
 <div class="form-group">

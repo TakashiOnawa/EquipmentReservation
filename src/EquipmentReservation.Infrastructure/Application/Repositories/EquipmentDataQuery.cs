@@ -1,5 +1,8 @@
-﻿using EquipmentReservation.Application.Equipments.Data;
+﻿using Dapper;
+using EquipmentReservation.Application.Equipments.Data;
 using EquipmentReservation.Application.Equipments.Queries;
+using EquipmentReservation.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +11,13 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
     public class EquipmentDataQuery : IEquipmentDataQuery
     {
+        private readonly MyDbContext _dbContext;
+
+        public EquipmentDataQuery(MyDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
         private string GetQuery(string baseQuery, string whereClause = null)
         {
             return string.Format(baseQuery, whereClause);
@@ -15,32 +25,20 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         private const string GetEquipmentDataQuery = @"
                 select
-                    equipment.EQUIPMENT_KEY as Id,
-                    equipment.EQUIPMENT_TYPE as Type,
-                    equipment.NAME as Name
+                    id as Id,
+                    equipment_type as EquipmentType,
+                    equipment_name as EquipmentName
                 from
-                    M_EQUIPMENT equipment
+                    equipments
                 {0}
                 order by
-                    equipment.EQUIPMENT_TYPE,
-                    equipment.NAME;
+                    equipment_type,
+                    equipment_name;
                 ";
 
         public IEnumerable<EquipmentData> FindAllEquipmentData()
         {
-            var equipmentDataList = new List<EquipmentData>();
-            foreach (var equipment in Domain.Repositories.EquipmentRepository._data)
-            {
-                equipmentDataList.Add(new EquipmentData()
-                {
-                    Id = equipment.Id.Value,
-                    Type = (int)equipment.EquipmentType,
-                    Name = equipment.Name
-                });
-            }
-            return equipmentDataList;
-
-            return new QueryableRepository().QueryObjects<EquipmentData>(GetQuery(GetEquipmentDataQuery));
+            return _dbContext.Database.GetDbConnection().Query<EquipmentData>(GetQuery(GetEquipmentDataQuery));
         }
     }
 }

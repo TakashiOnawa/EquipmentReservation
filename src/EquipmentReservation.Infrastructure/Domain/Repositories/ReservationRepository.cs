@@ -1,54 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
+using EquipmentReservation.Infrastructure.Database;
+using EquipmentReservation.Infrastructure.Database.Tables;
 
 namespace EquipmentReservation.Infrastructure.Domain.Repositories
 {
     public class ReservationRepository : IReservationRepository
     {
-        public static readonly List<Reservation> _data = new List<Reservation>();
+        private readonly MyDbContext _dbContext;
 
-        static ReservationRepository()
+        public ReservationRepository(MyDbContext dbContext)
         {
-            var additionalDay = 1;
-            var startDateTime = DateTime.Now;
-            foreach (var account in AccountRepository._data)
-            {
-                foreach (var equipment in EquipmentRepository._data)
-                {
-                    var reservation = new Reservation(
-                        new ReservationId(),
-                        account.Id,
-                        equipment.Id,
-                        new ReservationDateTime(startDateTime.AddDays(additionalDay), startDateTime.AddDays(additionalDay + 1)),
-                        "テスト");
-                    _data.Add(reservation);
-
-                    additionalDay++;
-                }
-            }
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public Reservation Find(ReservationId reservationId)
         {
-            return _data.Find(_ => _.Id == reservationId);
+            var reservation = _dbContext.Reservations.Find(reservationId.Value);
+            if (reservation == null) return null;
+
+            return Create(reservation);
         }
 
         public IEnumerable<Reservation> FindByEquipmentId(EquipmentId equipmentId)
         {
-            return _data.FindAll(_ => _.EquipmentId.Equals(equipmentId)).ToArray();
+            return _dbContext.Reservations.Where(_ => equipmentId.Equals(new EquipmentId(_.equipments_id))).Select(_ => Create(_)).ToArray();
         }
 
         public void Save(Reservation entity)
         {
-            var reservation = Find(entity.Id);
-            
-            if(reservation == null)
+            var reservation = _dbContext.Reservations.Find(entity.Id.Value);
+            var exists = reservation != null;
+
+            if (!exists)
             {
-                _data.Add(entity);
+                reservation = new RESERVATIONS();
             }
+
+            reservation.id = entity.Id.Value;
+            reservation.accounts_id = entity.AccountId.Value;
+            reservation.equipments_id = entity.EquipmentId.Value;
+            reservation.start_date_time = entity.ReservationDateTime.Start;
+            reservation.end_date_time = entity.ReservationDateTime.End;
+            reservation.purpose_of_use = entity.PurposeOfUse;
+
+            if (!exists)
+                _dbContext.Reservations.Add(reservation);
+            else
+                _dbContext.Reservations.Update(reservation);
+
+            _dbContext.SaveChanges();
+        }
+
+        private Reservation Create(RESERVATIONS reservation)
+        {
+            return new Reservation(
+                new ReservationId(reservation.id),
+                new AccountId(reservation.accounts_id),
+                new EquipmentId(reservation.equipments_id),
+                new ReservationDateTime(reservation.start_date_time, reservation.end_date_time),
+                reservation.purpose_of_use);
         }
     }
 }

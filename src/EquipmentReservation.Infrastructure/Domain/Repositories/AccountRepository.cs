@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using EquipmentReservation.Domain.Accounts;
+using EquipmentReservation.Infrastructure.Database;
 
 namespace EquipmentReservation.Infrastructure.Domain.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        public static readonly List<Account> _data = new List<Account>();
+        private readonly MyDbContext _dbContext;
 
-        static AccountRepository()
+        public AccountRepository(MyDbContext dbContext)
         {
-            _data.Add(new Account(new AccountId(), "アカウント1"));
-            _data.Add(new Account(new AccountId(), "アカウント2"));
-            _data.Add(new Account(new AccountId(), "アカウント3"));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public IEnumerable<Account> FindAll()
         {
-            return _data;
+            return _dbContext.Accounts.Select(_ => new Account(new AccountId(_.id), _.account_name)).ToArray();
         }
     }
 }

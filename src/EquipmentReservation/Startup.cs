@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
+using EquipmentReservation.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentReservation
 {
@@ -34,6 +36,7 @@ namespace EquipmentReservation
 
             services.AddMvc();
             DISetupper().Setup(services);
+            InitializeDatabase(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +68,11 @@ namespace EquipmentReservation
         private IDISetupper DISetupper()
         {
             return new ProductDISetupper();
+        }
+
+        private void InitializeDatabase(IServiceCollection services)
+        {
+            new SampleAppInitializer().Initialize(services.BuildServiceProvider().GetRequiredService<MyDbContext>());
         }
     }
 }
