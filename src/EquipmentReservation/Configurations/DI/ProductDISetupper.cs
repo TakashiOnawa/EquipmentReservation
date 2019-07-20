@@ -35,7 +35,8 @@ namespace EquipmentReservation.Configurations.DI
             services.AddScoped<IAccountQueryService, AccountQueryService>();
             services.AddScoped<IEquipmentAppService, EquipmentAppService>();
             services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
-            services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=J5100560;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
+            //services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=J5100560;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
+            services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=DESKTOP-I2UHKUN;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
         }
     }
 }

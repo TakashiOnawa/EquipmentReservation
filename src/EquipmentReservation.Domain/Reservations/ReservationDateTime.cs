@@ -9,7 +9,7 @@ namespace EquipmentReservation.Domain.Reservations
     {
         public ReservationDateTime(DateTime start, DateTime end)
         {
-            if (start.CompareTo(end) >= 0) throw new ArgumentException("終了時間は開始時間よりも後の時間にしてください。");
+            if (start.CompareTo(end) >= 0) throw new ArgumentException("終了日時は開始日時よりも後にしてください。");
             Start = start;
             End = end;
         }

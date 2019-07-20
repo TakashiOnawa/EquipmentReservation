@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Equipments.Data;
+using EquipmentReservation.Validations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EquipmentReservation.Models
@@ -29,6 +30,11 @@ namespace EquipmentReservation.Models
         [Required(ErrorMessage = "利用終了日付は必須入力です。")]
         public DateTime? EndDate { get; set; }
         [Required(ErrorMessage = "利用終了時間は必須入力です。")]
+        [StartEndDateTimeValidation(
+            StartDatePropertyName = nameof(StartDate), 
+            StartTimePropertyName = nameof(StartTime), 
+            EndDatePropertyName = nameof(EndDate), 
+            ErrorMessage = "利用終了日時は利用開始日時よりも後にしてください。")]
         public DateTime? EndTime { get; set; }
 
         [StringLength(64, ErrorMessage = "利用目的は {1} 文字以内で入力してください。")]
