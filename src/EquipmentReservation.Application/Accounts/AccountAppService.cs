@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EquipmentReservation.Application.Accounts.Data;
-using EquipmentReservation.Domain.Accounts;
 
 namespace EquipmentReservation.Application.Accounts
 {
     public class AccountAppService : IAccountAppService
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountAppService(IAccountRepository accountRepository)
+        public AccountAppService(IUnitOfWork unitOfWork)
         {
-            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
     }
 }

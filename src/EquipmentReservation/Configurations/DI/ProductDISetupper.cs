@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EquipmentReservation.Application;
 using EquipmentReservation.Application.Accounts;
 using EquipmentReservation.Application.Accounts.Queries;
 using EquipmentReservation.Application.Equipments;
@@ -11,6 +12,7 @@ using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
+using EquipmentReservation.Infrastructure;
 using EquipmentReservation.Infrastructure.Application.Repositories;
 using EquipmentReservation.Infrastructure.Database;
 using EquipmentReservation.Infrastructure.Domain.Repositories;
@@ -37,6 +39,7 @@ namespace EquipmentReservation.Configurations.DI
             services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
             //services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=J5100560;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
             services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=DESKTOP-I2UHKUN;Database=EquipmentReservations;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

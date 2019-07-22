@@ -7,18 +7,18 @@ namespace EquipmentReservation.Application.Equipments
 {
     public class EquipmentQueryService : IEquipmentQueryService
     {
-        private readonly IEquipmentDataQuery _equipmentDataQuery;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EquipmentQueryService(IEquipmentDataQuery equipmentDataQuery)
+        public EquipmentQueryService(IUnitOfWork unitOfWork)
         {
-            _equipmentDataQuery = equipmentDataQuery ?? throw new ArgumentNullException(nameof(equipmentDataQuery));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public GetAllEquipmentDataResponse GetAllEquipmentData()
         {
             return new GetAllEquipmentDataResponse()
             {
-                EquipmentDataList = _equipmentDataQuery.FindAllEquipmentData()
+                EquipmentDataList = _unitOfWork.EquipmentDataQuery.FindAllEquipmentData()
             };
         }
     }

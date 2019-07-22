@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EquipmentReservation.Application.Reservations.Data;
 using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Reservations;
 
@@ -9,18 +8,18 @@ namespace EquipmentReservation.Application.Reservations
 {
     public class ReservationQueryService : IReservationQueryService
     {
-        private readonly IReservationDataQuery _reservationDataQuery;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ReservationQueryService(IReservationDataQuery reservationDataQuery)
+        public ReservationQueryService(IUnitOfWork unitOfWork)
         {
-            _reservationDataQuery = reservationDataQuery ?? throw new ArgumentNullException(nameof(reservationDataQuery));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public GetReservationDataResponse GetReservationData(GetReservationDataRequest request)
         {
             return new GetReservationDataResponse()
             {
-                ReservationData = _reservationDataQuery.FindReservationData(new ReservationId(request.ReservationId))
+                ReservationData = _unitOfWork.ReservationDataQuery.FindReservationData(new ReservationId(request.ReservationId))
             };
         }
 
@@ -28,7 +27,7 @@ namespace EquipmentReservation.Application.Reservations
         {
             return new GetAllReservationListDataResponse()
             {
-                ReservationListDataList = _reservationDataQuery.FindAllReservationListData()
+                ReservationListDataList = _unitOfWork.ReservationDataQuery.FindAllReservationListData()
             };
         }
 
@@ -36,7 +35,7 @@ namespace EquipmentReservation.Application.Reservations
         {
             return new GetReservationListDataResponse()
             {
-                ReservationListData = _reservationDataQuery.FindReservationListData(new ReservationId(request.ReservationId))
+                ReservationListData = _unitOfWork.ReservationDataQuery.FindReservationListData(new ReservationId(request.ReservationId))
             };
         }
     }

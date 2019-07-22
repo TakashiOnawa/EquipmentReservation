@@ -1,22 +1,16 @@
-﻿using Dapper;
-using EquipmentReservation.Application.Accounts.Data;
+﻿using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Accounts.Queries;
+using EquipmentReservation.Infrastructure.Application.Repositories.Commons;
 using EquipmentReservation.Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class AccountDataQuery : IAccountDataQuery
+    public class AccountDataQuery : QuerableRepository, IAccountDataQuery
     {
-        private readonly MyDbContext _dbContext;
-
-        public AccountDataQuery(MyDbContext dbContext)
-        {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        }
+        public AccountDataQuery(MyDbContext dbContext) : base(dbContext) { }
 
         private string GetQuery(string baseQuery, string whereClause = null)
         {
@@ -36,7 +30,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<AccountData> GetAccountData()
         {
-            return _dbContext.Database.GetDbConnection().Query<AccountData>(GetQuery(GetAccountDataQuery));
+            return QueryObjects<AccountData>(GetQuery(GetAccountDataQuery));
         }
 
     }

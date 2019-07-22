@@ -16,7 +16,7 @@ namespace EquipmentReservation.Domain.Reservations
             _reservationRepository = reservationRepository;
         }
 
-        public bool IsDupulicateReservation(Reservation reservation)
+        public bool IsDupulicatedReservation(Reservation reservation)
         {
             Assertion.ArgumentNotNull(reservation, nameof(reservation));
             var reservations = _reservationRepository.FindByEquipmentId(reservation.EquipmentId);

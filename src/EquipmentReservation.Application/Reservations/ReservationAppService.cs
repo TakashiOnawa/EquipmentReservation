@@ -11,53 +11,76 @@ namespace EquipmentReservation.Application.Reservations
 {
     public class ReservationAppService : IReservationAppService
     {
-        private readonly IReservationRepository _reservationRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private static object _saveReservationLockObject = new object();
 
-        public ReservationAppService(IReservationRepository reservationRepository)
+        public ReservationAppService(IUnitOfWork unitOfWork)
         {
-            _reservationRepository = reservationRepository ?? throw new ArgumentNullException(nameof(reservationRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public void RegisterReservation(RegisterReservationRequest request)
         {
-            var reservation = new Reservation(
-                new ReservationId(),
-                new AccountId(request.AccountId),
-                new EquipmentId(request.EquipmentId),
-                new ReservationDateTime(request.StartDateTime, request.EndDateTime),
-                request.PurposeOfUse);
-
-            var service = new ReservationService(_reservationRepository);
-            if (service.IsDupulicateReservation(reservation))
+            try
             {
-                throw new ReservationDupulicationException();
-            }
+                var reservation = new Reservation(
+                    new ReservationId(),
+                    new AccountId(request.AccountId),
+                    new EquipmentId(request.EquipmentId),
+                    new ReservationDateTime(request.StartDateTime, request.EndDateTime),
+                    request.PurposeOfUse);
 
-            _reservationRepository.Save(reservation);
+                SaveReservation(reservation);
+
+                _unitOfWork.Commit();
+            }
+            catch (Exception e)
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
         }
 
         public void ChangeReservationInfo(ChangeReservationInfoRequest request)
         {
-            var reservationId = new ReservationId(request.Id);
-
-            var reservation = _reservationRepository.Find(reservationId);
-            if (reservation == null)
+            try
             {
-                throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId.Value));
+                var reservationId = new ReservationId(request.Id);
+
+                var reservation = _unitOfWork.ReservationRepository.Find(reservationId);
+                if (reservation == null)
+                {
+                    throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId.Value));
+                }
+
+                reservation.ChangeAccountOfUse(new AccountId(request.AccountId));
+                reservation.ChangeEquipment(new EquipmentId(request.EquipmentId));
+                reservation.ChangeReservationDateTime(new ReservationDateTime(request.StartDateTime, request.EndDateTime));
+                reservation.ChangePurposeOfUse(request.PurposeOfUse);
+
+                SaveReservation(reservation);
+
+                _unitOfWork.Commit();
             }
-
-            reservation.ChangeAccountOfUse(new AccountId(request.AccountId));
-            reservation.ChangeEquipment(new EquipmentId(request.EquipmentId));
-            reservation.ChangeReservationDateTime(new ReservationDateTime(request.StartDateTime, request.EndDateTime));
-            reservation.ChangePurposeOfUse(request.PurposeOfUse);
-
-            var service = new ReservationService(_reservationRepository);
-            if (service.IsDupulicateReservation(reservation))
+            catch (Exception e)
             {
-                throw new ReservationDupulicationException();
+                _unitOfWork.Rollback();
+                throw;
             }
+        }
 
-            _reservationRepository.Save(reservation);
+        private void SaveReservation(Reservation reservation)
+        {
+            lock (_saveReservationLockObject)
+            {
+                var service = new ReservationService(_unitOfWork.ReservationRepository);
+                if (service.IsDupulicatedReservation(reservation))
+                {
+                    throw new ReservationDupulicationException();
+                }
+
+                _unitOfWork.ReservationRepository.Save(reservation);
+            }
         }
     }
 }

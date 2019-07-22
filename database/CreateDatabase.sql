@@ -26,6 +26,6 @@ create table reservations (
   equipments_id varchar(255) not null references equipments(id),
   start_date_time datetime not null,
   end_date_time datetime not null,
-  purpose_of_use nvarchar(255) not null
+  purpose_of_use nvarchar(255)
 );
 go

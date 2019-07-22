@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EquipmentReservation.Application.Equipments.Data;
-using EquipmentReservation.Domain.Equipments;
 
 namespace EquipmentReservation.Application.Equipments
 {
     public class EquipmentAppService : IEquipmentAppService
     {
-        private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EquipmentAppService(IEquipmentRepository equipmentRepository)
+        public EquipmentAppService(IUnitOfWork unitOfWork)
         {
-            _equipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
     }
 }

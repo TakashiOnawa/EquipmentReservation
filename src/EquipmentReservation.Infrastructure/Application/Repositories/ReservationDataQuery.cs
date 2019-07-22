@@ -1,24 +1,17 @@
-﻿using Dapper;
-using EquipmentReservation.Application.Reservations.Data;
+﻿using EquipmentReservation.Application.Reservations.Data;
 using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Reservations;
+using EquipmentReservation.Infrastructure.Application.Repositories.Commons;
 using EquipmentReservation.Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class ReservationDataQuery : IReservationDataQuery
+    public class ReservationDataQuery : QuerableRepository, IReservationDataQuery
     {
-        private readonly MyDbContext _dbContext;
-
-        public ReservationDataQuery(MyDbContext dbContext)
-        {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        }
+        public ReservationDataQuery(MyDbContext dbContext) : base(dbContext) { }
 
         private string GetQuery(string baseQuery, string whereClause = null)
         {
@@ -43,7 +36,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<ReservationData> FindAllReservationData()
         {
-            return _dbContext.Database.GetDbConnection().Query<ReservationData>(GetQuery(GetReservationDataQuery));
+            return QueryObjects<ReservationData>(GetQuery(GetReservationDataQuery));
         }
 
         public ReservationData FindReservationData(ReservationId reservationId)
@@ -52,7 +45,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
             var parameter = new { id = reservationId.Value };
 
-            return _dbContext.Database.GetDbConnection().Query<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), parameter).FirstOrDefault();
+            return QueryObject<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), parameter);
         }
 
         private const string GetReservationListDataQuery = @"
@@ -78,7 +71,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<ReservationListData> FindAllReservationListData()
         {
-            return _dbContext.Database.GetDbConnection().Query<ReservationListData>(GetQuery(GetReservationListDataQuery));
+            return QueryObjects<ReservationListData>(GetQuery(GetReservationListDataQuery));
         }
 
         public ReservationListData FindReservationListData(ReservationId reservationId)
@@ -87,7 +80,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
             var parameter = new { id = reservationId.Value };
 
-            return _dbContext.Database.GetDbConnection().Query<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), parameter).FirstOrDefault();
+            return QueryObject<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), parameter);
         }
     }
 }
