@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Transactions;
 using EquipmentReservation.Infrastructure.Database.Tables;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ namespace EquipmentReservation.Infrastructure.Database
         public DbSet<RESERVATIONS> Reservations { get; set; }
     }
 
-    public class SampleAppInitializer
+    public class TestDBInitializer
     {
         public void Initialize(MyDbContext dbContext)
         {

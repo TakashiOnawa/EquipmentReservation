@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
 using EquipmentReservation.Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentReservation
 {
@@ -72,7 +71,7 @@ namespace EquipmentReservation
 
         private void InitializeDatabase(IServiceCollection services)
         {
-            new SampleAppInitializer().Initialize(services.BuildServiceProvider().GetRequiredService<MyDbContext>());
+            new TestDBInitializer().Initialize(services.BuildServiceProvider().GetRequiredService<MyDbContext>());
         }
     }
 }

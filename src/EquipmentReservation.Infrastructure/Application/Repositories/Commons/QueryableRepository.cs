@@ -9,11 +9,11 @@ using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories.Commons
 {
-    public abstract class QuerableRepository
+    public abstract class QueryableRepository
     {
         protected readonly MyDbContext _dbContext;
 
-        public QuerableRepository(MyDbContext dbContext)
+        public QueryableRepository(MyDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }

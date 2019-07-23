@@ -8,7 +8,7 @@ using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class EquipmentDataQuery : QuerableRepository, IEquipmentDataQuery
+    public class EquipmentDataQuery : QueryableRepository, IEquipmentDataQuery
     {
         public EquipmentDataQuery(MyDbContext dbContext) : base(dbContext) { }
 
