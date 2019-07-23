@@ -1,0 +1,59 @@
+@startuml
+
+class 予約
+{
+  予約ID
+  アカウントID
+  備品ID
+  利用目的
+}
+
+package 予約 <<Rectangle>>
+{
+  class 予約
+  {
+    予約ID
+    アカウントID
+    備品ID
+    利用目的
+  }
+
+  class 予約日時
+  {
+    利用開始日時
+    利用終了日時
+  }
+
+  予約 o-- 予約日時
+  予約 --> 備品
+  予約 --> アカウント
+}
+
+package 備品 <<Rectangle>>
+{
+  class 備品
+  {
+    備品ID
+    備品名
+  }
+
+  enum 備品種別
+  {
+    USB
+    ポケットWifi
+    携帯電話 
+  }
+
+  備品 o-- 備品種別
+}
+
+package アカウント <<Rectangle>>
+{
+  class アカウント
+  {
+    アカウントID
+    アカウント名
+  }
+}
+
+@enduml
