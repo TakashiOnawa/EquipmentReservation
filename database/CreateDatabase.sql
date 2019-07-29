@@ -1,10 +1,10 @@
-drop database if exists EquipmentReservations;
+drop database if exists EquipmentReservation;
 go
 
-create database EquipmentReservations;
+create database EquipmentReservation;
 go
 
-use EquipmentReservations;
+use EquipmentReservation;
 go
 
 create table accounts (

@@ -1,0 +1,13 @@
+version: '3'
+services:
+  mssql:
+    build: ./
+    image: mssql
+    container_name: mssql-server
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=test!234
+      - MSSQL_LCID=1041
+      - MSSQL_COLLATION=Japanese_CI_AS
