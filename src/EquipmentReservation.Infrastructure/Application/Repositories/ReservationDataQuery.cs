@@ -9,7 +9,7 @@ using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class ReservationDataQuery : QuerableRepository, IReservationDataQuery
+    public class ReservationDataQuery : QueryableRepository, IReservationDataQuery
     {
         public ReservationDataQuery(MyDbContext dbContext) : base(dbContext) { }
 

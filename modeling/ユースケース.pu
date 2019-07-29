@@ -1,0 +1,42 @@
+@startuml
+
+left to right direction
+
+actor 利用者
+actor 管理者
+
+rectangle 予約 {
+  usecase (ログインする) as login
+  usecase (予約する) as RegisterReservation
+  usecase (予約を変更する) as ChangeReservation
+  usecase (予約をキャンセルする) as CancelReservation
+
+  利用者 --> login
+  利用者 --> RegisterReservation
+  利用者 --> ChangeReservation
+  利用者 --> CancelReservation
+}
+
+rectangle アカウント管理 {
+  usecase (アカウントを登録する) as RegisterAccount
+  usecase (アカウントを変更する) as ChangeAccount
+  usecase (アカウントを削除する) as RemoveAccount
+
+  管理者 --> RegisterAccount
+  管理者 --> ChangeAccount
+  ChangeAccount ..> (アカウントの基本情報を変更する) : <<include>>
+  ChangeAccount ..> (アカウントの権限を変更する) : <<include>>
+  管理者 --> RemoveAccount
+}
+
+rectangle 備品管理 {
+  usecase (備品を登録する) as RegisterEquipment
+  usecase (備品を変更する) as ChangeEquipment
+  usecase (備品を削除する) as RemoveEquipment
+
+  管理者 --> RegisterEquipment
+  管理者 --> ChangeEquipment
+  管理者 --> RemoveEquipment
+}
+
+@enduml
