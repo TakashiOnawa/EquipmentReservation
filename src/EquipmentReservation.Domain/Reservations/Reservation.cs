@@ -87,6 +87,19 @@ namespace EquipmentReservation.Domain.Reservations
             }
         }
 
+        private Cancellation _cancellation;
+        public Cancellation Cancellation
+        {
+            get { return _cancellation; }
+            private set
+            {
+                if (value != null && _cancellation != null)
+                    throw new InvalidOperationException("既にキャンセルされています。");
+
+                _cancellation = value;
+            }
+        }
+
         public void ChangeAccountOfUse(AccountId accountId)
         {
             AccountId = accountId;
@@ -113,6 +126,11 @@ namespace EquipmentReservation.Domain.Reservations
             if (!EquipmentId.Equals(other.EquipmentId)) return false;
             if (!ReservationDateTime.IsRangeOverlapping(other.ReservationDateTime)) return false;
             return true;
+        }
+
+        public void Cancel(AccountId accountId)
+        {
+            Cancellation = new Cancellation(accountId, DateTime.Now);
         }
 
         public override bool Equals(object obj)
