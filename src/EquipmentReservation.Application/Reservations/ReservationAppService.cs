@@ -20,6 +20,7 @@ namespace EquipmentReservation.Application.Reservations
 
         public void RegisterReservation(RegisterReservationRequest request)
         {
+            _unitOfWork.Begin();
             try
             {
                 var reservation = new Reservation(
@@ -28,12 +29,8 @@ namespace EquipmentReservation.Application.Reservations
                     new EquipmentId(request.EquipmentId),
                     new ReservationDateTime(request.StartDateTime, request.EndDateTime),
                     request.PurposeOfUse);
-                var service = new ReservationService(_unitOfWork.ReservationRepository);
-                if (service.IsDupulicatedReservation(reservation))
-                {
-                    throw new ReservationDupulicationException();
-                }
-                _unitOfWork.ReservationRepository.Save(reservation);
+
+                SaveReservation(reservation);
                 _unitOfWork.Commit();
             }
             catch
@@ -45,22 +42,17 @@ namespace EquipmentReservation.Application.Reservations
 
         public void ChangeReservationInfo(ChangeReservationInfoRequest request)
         {
+            _unitOfWork.Begin();
             try
             {
-                var reservationId = new ReservationId(request.ReservationId);
-                var reservation = FindReservationWithValidation(reservationId);
+                var reservation = FindReservationWithValidation(request.ReservationId);
 
                 reservation.ChangeAccountOfUse(new AccountId(request.AccountId));
                 reservation.ChangeEquipment(new EquipmentId(request.EquipmentId));
                 reservation.ChangeReservationDateTime(new ReservationDateTime(request.StartDateTime, request.EndDateTime));
                 reservation.ChangePurposeOfUse(request.PurposeOfUse);
-                var service = new ReservationService(_unitOfWork.ReservationRepository);
-                if (service.IsDupulicatedReservation(reservation))
-                {
-                    throw new ReservationDupulicationException();
-                }
 
-                _unitOfWork.ReservationRepository.Save(reservation);
+                SaveReservation(reservation);
                 _unitOfWork.Commit();
             }
             catch
@@ -72,10 +64,10 @@ namespace EquipmentReservation.Application.Reservations
 
         public void CancelReservation(CancelReservationRequest request)
         {
+            _unitOfWork.Begin();
             try
             {
-                var reservationId = new ReservationId(request.ReservationId);
-                var reservation = FindReservationWithValidation(reservationId);
+                var reservation = FindReservationWithValidation(request.ReservationId);
 
                 reservation.Cancel();
 
@@ -89,14 +81,24 @@ namespace EquipmentReservation.Application.Reservations
             }
         }
 
-        private Reservation FindReservationWithValidation(ReservationId reservationId)
+        private Reservation FindReservationWithValidation(string reservationId)
         {
-            var reservation = _unitOfWork.ReservationRepository.Find(reservationId);
+            var reservation = _unitOfWork.ReservationRepository.Find(new ReservationId(reservationId));
             if (reservation == null)
             {
-                throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId.Value));
+                throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId));
             }
             return reservation;
+        }
+
+        private void SaveReservation(Reservation reservation)
+        {
+            var service = new ReservationService(_unitOfWork.ReservationRepository);
+            if (service.IsDupulicatedReservation(reservation))
+            {
+                throw new ReservationDupulicationException();
+            }
+            _unitOfWork.ReservationRepository.Save(reservation);
         }
     }
 }

@@ -25,21 +25,18 @@ namespace EquipmentReservation.Configurations.DI
     {
         public void Setup(IServiceCollection services)
         {
-            //services.AddScoped<IReservationRepository, ReservationRepository>();
-            //services.AddScoped<IReservationDataQuery, ReservationDataQuery>();
-            //services.AddScoped<IAccountRepository, AccountRepository>();
-            //services.AddScoped<IAccountDataQuery, AccountDataQuery>();
-            //services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-            //services.AddScoped<IEquipmentDataQuery, EquipmentDataQuery>();
-            services.AddScoped<IReservationAppService, ReservationAppService>();
-            services.AddScoped<IReservationQueryService, ReservationQueryService>();
-            services.AddScoped<IAccountAppService, AccountAppService>();
-            services.AddScoped<IAccountQueryService, AccountQueryService>();
-            services.AddScoped<IEquipmentAppService, EquipmentAppService>();
-            services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+            // DB コンテキストは 「ServiceLifetime.Scoped」 にし 1 リクエスト 1 インスタンスにすることで
+            // ApplicationService 間で同一のコネクションを使用できるようにする。
             //services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=J5100560;Database=EquipmentReservation;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
             services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Server=DESKTOP-I2UHKUN;Database=EquipmentReservation;User ID=sa;Password=test!234"), ServiceLifetime.Scoped);
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IReservationAppService, ReservationAppService>();
+            services.AddTransient<IReservationQueryService, ReservationQueryService>();
+            services.AddTransient<IAccountAppService, AccountAppService>();
+            services.AddTransient<IAccountQueryService, AccountQueryService>();
+            services.AddTransient<IEquipmentAppService, EquipmentAppService>();
+            services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
         }
     }
 }

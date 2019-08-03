@@ -21,7 +21,6 @@ namespace EquipmentReservation.Infrastructure
         public UnitOfWork(MyDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _dbContext.Database.BeginTransaction();
         }
 
         private IAccountRepository _accountRepository;
@@ -82,6 +81,11 @@ namespace EquipmentReservation.Infrastructure
                 if (_reservationDataQuery == null) _reservationDataQuery = new ReservationDataQuery(_dbContext);
                 return _reservationDataQuery;
             }
+        }
+
+        public void Begin()
+        {
+            _dbContext.Database.BeginTransaction();
         }
 
         public void Commit()

@@ -30,7 +30,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories.Commons
 
         private IEnumerable<T> Query<T>(string query, object parameter = null)
         {
-            return _dbContext.Database.GetDbConnection().Query<T>(query, parameter, transaction: _dbContext.Database.CurrentTransaction.GetDbTransaction());
+            return _dbContext.Database.GetDbConnection().Query<T>(query, parameter, transaction: _dbContext.Database.CurrentTransaction?.GetDbTransaction());
         }
     }
 }

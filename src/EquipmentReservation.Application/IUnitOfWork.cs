@@ -20,6 +20,7 @@ namespace EquipmentReservation.Application
         IEquipmentDataQuery EquipmentDataQuery { get; }
         IReservationDataQuery ReservationDataQuery { get; }
 
+        void Begin();
         void Commit();
         void Rollback();
     }
