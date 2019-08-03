@@ -8,6 +8,7 @@
 @using (Html.BeginForm("EditReservation", "Reservation"))
 {
     @Html.Partial("_ReservationPartial", Model)
+    <input type="submit" class="btn btn-primary" value="変更" />
 }
 
 <div>
@@ -15,5 +16,5 @@
 </div>
 
 @*@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}*@
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }*@

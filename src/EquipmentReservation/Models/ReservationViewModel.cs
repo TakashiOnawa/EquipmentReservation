@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Equipments.Data;
 using EquipmentReservation.Validations;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EquipmentReservation.Models
 {
@@ -39,6 +38,8 @@ namespace EquipmentReservation.Models
 
         [StringLength(64, ErrorMessage = "利用目的は {1} 文字以内で入力してください。")]
         public string PurposeOfUse { get; set; }
+
+        public bool IsReadOnly { get; set; }
 
         public DateTime? GetStartDateTime()
         {

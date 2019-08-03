@@ -12,7 +12,6 @@ namespace EquipmentReservation.Application.Reservations
     public class ReservationAppService : IReservationAppService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private static object _saveReservationLockObject = new object();
 
         public ReservationAppService(IUnitOfWork unitOfWork)
         {
@@ -29,12 +28,15 @@ namespace EquipmentReservation.Application.Reservations
                     new EquipmentId(request.EquipmentId),
                     new ReservationDateTime(request.StartDateTime, request.EndDateTime),
                     request.PurposeOfUse);
-
-                SaveReservation(reservation);
-
+                var service = new ReservationService(_unitOfWork.ReservationRepository);
+                if (service.IsDupulicatedReservation(reservation))
+                {
+                    throw new ReservationDupulicationException();
+                }
+                _unitOfWork.ReservationRepository.Save(reservation);
                 _unitOfWork.Commit();
             }
-            catch (Exception e)
+            catch
             {
                 _unitOfWork.Rollback();
                 throw;
@@ -45,34 +47,13 @@ namespace EquipmentReservation.Application.Reservations
         {
             try
             {
-                var reservationId = new ReservationId(request.Id);
-
-                var reservation = _unitOfWork.ReservationRepository.Find(reservationId);
-                if (reservation == null)
-                {
-                    throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId.Value));
-                }
+                var reservationId = new ReservationId(request.ReservationId);
+                var reservation = FindReservationWithValidation(reservationId);
 
                 reservation.ChangeAccountOfUse(new AccountId(request.AccountId));
                 reservation.ChangeEquipment(new EquipmentId(request.EquipmentId));
                 reservation.ChangeReservationDateTime(new ReservationDateTime(request.StartDateTime, request.EndDateTime));
                 reservation.ChangePurposeOfUse(request.PurposeOfUse);
-
-                SaveReservation(reservation);
-
-                _unitOfWork.Commit();
-            }
-            catch (Exception e)
-            {
-                _unitOfWork.Rollback();
-                throw;
-            }
-        }
-
-        private void SaveReservation(Reservation reservation)
-        {
-            lock (_saveReservationLockObject)
-            {
                 var service = new ReservationService(_unitOfWork.ReservationRepository);
                 if (service.IsDupulicatedReservation(reservation))
                 {
@@ -80,7 +61,42 @@ namespace EquipmentReservation.Application.Reservations
                 }
 
                 _unitOfWork.ReservationRepository.Save(reservation);
+                _unitOfWork.Commit();
             }
+            catch
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
+        }
+
+        public void CancelReservation(CancelReservationRequest request)
+        {
+            try
+            {
+                var reservationId = new ReservationId(request.ReservationId);
+                var reservation = FindReservationWithValidation(reservationId);
+
+                reservation.Cancel();
+
+                _unitOfWork.ReservationRepository.Save(reservation);
+                _unitOfWork.Commit();
+            }
+            catch
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
+        }
+
+        private Reservation FindReservationWithValidation(ReservationId reservationId)
+        {
+            var reservation = _unitOfWork.ReservationRepository.Find(reservationId);
+            if (reservation == null)
+            {
+                throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId.Value));
+            }
+            return reservation;
         }
     }
 }

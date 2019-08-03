@@ -9,5 +9,6 @@ namespace EquipmentReservation.Application.Reservations
     {
         void RegisterReservation(RegisterReservationRequest request);
         void ChangeReservationInfo(ChangeReservationInfoRequest request);
+        void CancelReservation(CancelReservationRequest request);
     }
 }

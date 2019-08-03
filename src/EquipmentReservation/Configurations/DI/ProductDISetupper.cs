@@ -25,12 +25,12 @@ namespace EquipmentReservation.Configurations.DI
     {
         public void Setup(IServiceCollection services)
         {
-            services.AddScoped<IReservationRepository, ReservationRepository>();
-            services.AddScoped<IReservationDataQuery, ReservationDataQuery>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IAccountDataQuery, AccountDataQuery>();
-            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-            services.AddScoped<IEquipmentDataQuery, EquipmentDataQuery>();
+            //services.AddScoped<IReservationRepository, ReservationRepository>();
+            //services.AddScoped<IReservationDataQuery, ReservationDataQuery>();
+            //services.AddScoped<IAccountRepository, AccountRepository>();
+            //services.AddScoped<IAccountDataQuery, AccountDataQuery>();
+            //services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            //services.AddScoped<IEquipmentDataQuery, EquipmentDataQuery>();
             services.AddScoped<IReservationAppService, ReservationAppService>();
             services.AddScoped<IReservationQueryService, ReservationQueryService>();
             services.AddScoped<IAccountAppService, AccountAppService>();

@@ -35,9 +35,16 @@ namespace EquipmentReservation.Infrastructure.Domain.Repositories
         public void Save(Reservation entity)
         {
             var reservation = _dbContext.Reservations.Find(entity.Id.Value);
-            var exists = reservation != null;
 
-            if (!exists)
+            if (entity.Canceled)
+            {
+                _dbContext.Reservations.Remove(reservation);
+                _dbContext.SaveChanges();
+                return;
+            }
+
+            var exists = reservation != null;
+            if (reservation == null)
             {
                 reservation = new RESERVATIONS();
             }
@@ -50,9 +57,13 @@ namespace EquipmentReservation.Infrastructure.Domain.Repositories
             reservation.purpose_of_use = entity.PurposeOfUse;
 
             if (!exists)
+            {
                 _dbContext.Reservations.Add(reservation);
+            }
             else
+            {
                 _dbContext.Reservations.Update(reservation);
+            }
 
             _dbContext.SaveChanges();
         }

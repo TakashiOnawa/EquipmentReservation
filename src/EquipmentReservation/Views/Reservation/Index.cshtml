@@ -34,7 +34,8 @@
                 <td>@reservation.StartDateTime</td>
                 <td>@reservation.EndDateTime</td>
                 <td>@reservation.PurposeOfUse</td>
-                <td>@Html.ActionLink("変更", "EditReservation", "Reservation", new { id = reservation.Id }, new { @class = "btn btn-default" })</td>
+                <td>@Html.ActionLink("変更", "EditReservation", "Reservation", new { reservationId = reservation.Id }, new { @class = "btn btn-default" })</td>
+                <td>@Html.ActionLink("キャンセル", "CancelReservation", "Reservation", new { reservationId = reservation.Id }, new { @class = "btn btn-default" })</td>
             </tr>
             }
         </tbody>

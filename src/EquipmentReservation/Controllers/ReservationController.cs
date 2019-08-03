@@ -57,7 +57,7 @@ namespace EquipmentReservation.Controllers
                 return View(model);
             }
 
-            var command = new RegisterReservationRequest()
+            var request = new RegisterReservationRequest()
             {
                 AccountId = model.SelectedAccountId,
                 EquipmentId = model.SelectedEquipmentId,
@@ -68,7 +68,7 @@ namespace EquipmentReservation.Controllers
 
             try
             {
-                _reservationAppService.RegisterReservation(command);
+                _reservationAppService.RegisterReservation(request);
             }
             catch (ReservationDupulicationException)
             {
@@ -81,22 +81,9 @@ namespace EquipmentReservation.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult EditReservation(string id)
+        public IActionResult EditReservation(string reservationId)
         {
-            var request = new GetReservationListDataRequest() { ReservationId = id };
-            var response = _reservationQueryService.GetReservationListData(request);
-
-            var model = new ReservationViewModel();
-            model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
-            model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
-            model.Id = response.ReservationListData.Id;
-            model.SelectedAccountId = response.ReservationListData.AccountId;
-            model.SelectedEquipmentId = response.ReservationListData.EquipmentId;
-            model.StartDate = response.ReservationListData.StartDateTime;
-            model.StartTime = response.ReservationListData.StartDateTime;
-            model.EndDate = response.ReservationListData.EndDateTime;
-            model.EndTime = response.ReservationListData.EndDateTime;
-            model.PurposeOfUse = response.ReservationListData.PurposeOfUse;
+            var model = CreateReservationViewModel(reservationId);
             return View(model);
         }
 
@@ -111,9 +98,9 @@ namespace EquipmentReservation.Controllers
                 return View(model);
             }
 
-            var command = new ChangeReservationInfoRequest()
+            var request = new ChangeReservationInfoRequest()
             {
-                Id = model.Id,
+                ReservationId = model.Id,
                 AccountId = model.SelectedAccountId,
                 EquipmentId = model.SelectedEquipmentId,
                 StartDateTime = model.GetStartDateTime().Value,
@@ -123,7 +110,7 @@ namespace EquipmentReservation.Controllers
 
             try
             {
-                _reservationAppService.ChangeReservationInfo(command);
+                _reservationAppService.ChangeReservationInfo(request);
             }
             catch (ReservationDupulicationException)
             {
@@ -134,6 +121,48 @@ namespace EquipmentReservation.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult CancelReservation(string reservationId)
+        {
+            var model = CreateReservationViewModel(reservationId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult CancelReservation(ReservationViewModel model)
+        {
+            var request = new CancelReservationRequest()
+            {
+                ReservationId = model.Id
+            };
+
+            _reservationAppService.CancelReservation(request);
+
+            return RedirectToAction("Index");
+        }
+
+        private ReservationViewModel CreateReservationViewModel(string reservationId)
+        {
+            var request = new GetReservationDataRequest()
+            {
+                ReservationId = reservationId
+            };
+            var response = _reservationQueryService.GetReservationData(request);
+
+            var model = new ReservationViewModel();
+            model.AccountList = _accountQueryService.GetAllAccountData().AccountDataList;
+            model.EquipmentList = _equipmentQueryService.GetAllEquipmentData().EquipmentDataList;
+            model.Id = response.ReservationData.Id;
+            model.SelectedAccountId = response.ReservationData.AccountId;
+            model.SelectedEquipmentId = response.ReservationData.EquipmentId;
+            model.StartDate = response.ReservationData.StartDateTime;
+            model.StartTime = response.ReservationData.StartDateTime;
+            model.EndDate = response.ReservationData.EndDateTime;
+            model.EndTime = response.ReservationData.EndDateTime;
+            model.PurposeOfUse = response.ReservationData.PurposeOfUse;
+
+            return model;
         }
     }
 }

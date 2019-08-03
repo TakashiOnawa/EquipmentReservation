@@ -6,7 +6,7 @@ namespace EquipmentReservation.Application.Reservations.Commands
 {
     public class ChangeReservationInfoRequest
     {
-        public string Id { get; set; }
+        public string ReservationId { get; set; }
         public string EquipmentId { get; set; }
         public string AccountId { get; set; }
         public DateTime StartDateTime { get; set; }

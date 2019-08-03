@@ -21,7 +21,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
         private const string GetReservationDataQuery = @"
                 select
                     id as Id,
-                    accounts_id as AccuntId,
+                    accounts_id as AccountId,
                     equipments_id as EquipmentId,
                     start_date_time as StartDateTime,
                     end_date_time as EndDateTime,

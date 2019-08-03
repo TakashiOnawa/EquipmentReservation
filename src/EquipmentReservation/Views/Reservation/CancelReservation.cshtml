@@ -1,0 +1,42 @@
+﻿@model EquipmentReservation.Models.ReservationViewModel
+@{
+    ViewBag.Title = "予約キャンセル";
+}
+
+<h2>予約キャンセル</h2>
+
+@using (Html.BeginForm("CancelReservation", "Reservation"))
+{
+    <label>キャンセルしますか？</label>
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        <label>利用者</label>
+        @Html.DropDownListFor(model => model.SelectedAccountId, new SelectList(Model.AccountList, "Id", "AccountName", 1), "-- 選択してください --", new { @class = "form-control", @disabled = "disabled" })
+    </div>
+    <div class="form-group">
+        <label>備品</label>
+        @Html.DropDownListFor(model => model.SelectedEquipmentId, new SelectList(Model.EquipmentList, "Id", "EquipmentName", 1), "-- 選択してください --", new { @class = "form-control", @disabled = "disabled" })
+    </div>
+    <div class="form-group">
+        <label>利用開始日時</label>
+        <input asp-for="StartDate" class="form-control" type="date" disabled="disabled" />
+        <input asp-for="StartTime" class="form-control" type="time" disabled="disabled" />
+    </div>
+    <div class="form-group">
+        <label>利用終了日時</label>
+        <input asp-for="EndDate" class="form-control" type="date" disabled="disabled" />
+        <input asp-for="EndTime" class="form-control" type="time" disabled="disabled" />
+    </div>
+    <div class="form-group">
+        <label>利用目的</label>
+        <input asp-for="PurposeOfUse" class="form-control" placeholder="利用目的" disabled="disabled" />
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="キャンセル" />
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

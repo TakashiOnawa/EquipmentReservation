@@ -87,16 +87,13 @@ namespace EquipmentReservation.Domain.Reservations
             }
         }
 
-        private Cancellation _cancellation;
-        public Cancellation Cancellation
+        private bool _canceled;
+        public bool Canceled
         {
-            get { return _cancellation; }
+            get { return _canceled; }
             private set
             {
-                if (value != null && _cancellation != null)
-                    throw new InvalidOperationException("既にキャンセルされています。");
-
-                _cancellation = value;
+                _canceled = value;
             }
         }
 
@@ -128,9 +125,9 @@ namespace EquipmentReservation.Domain.Reservations
             return true;
         }
 
-        public void Cancel(AccountId accountId)
+        public void Cancel()
         {
-            Cancellation = new Cancellation(accountId, DateTime.Now);
+            _canceled = true;
         }
 
         public override bool Equals(object obj)
