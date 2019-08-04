@@ -1,2 +1,2 @@
-from microsoft/mssql-server-windows-developer
-copy CreateDatabase.sql C:/
+from microsoft/mssql-server-linux
+copy ./CreateDatabase.sql /tmp/CreateDatabase.sql
