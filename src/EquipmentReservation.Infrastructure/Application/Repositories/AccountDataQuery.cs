@@ -1,16 +1,19 @@
 ﻿using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Accounts.Queries;
-using EquipmentReservation.Infrastructure.Application.Repositories.Commons;
 using EquipmentReservation.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class AccountDataQuery : QueryableRepository, IAccountDataQuery
+    public class AccountDataQuery : IAccountDataQuery
     {
-        public AccountDataQuery(MyDbContext dbContext) : base(dbContext) { }
+        private readonly MyDbContext _dbContext;
+
+        public AccountDataQuery(MyDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
 
         private string GetQuery(string baseQuery, string whereClause = null)
         {
@@ -30,7 +33,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<AccountData> GetAccountData()
         {
-            return QueryObjects<AccountData>(GetQuery(GetAccountDataQuery));
+            return new QueryableRepository(_dbContext).QueryObjects<AccountData>(GetQuery(GetAccountDataQuery));
         }
 
     }

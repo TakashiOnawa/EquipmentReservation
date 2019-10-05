@@ -68,6 +68,11 @@ namespace EquipmentReservation.Infrastructure.Domain.Repositories
             _dbContext.SaveChanges();
         }
 
+        public void Lock()
+        {
+            new QueryableRepository(_dbContext).QueryObjects<RESERVATIONS>("select * from reservations for update;");
+        }
+
         private Reservation Create(RESERVATIONS reservation)
         {
             return new Reservation(

@@ -1,17 +1,20 @@
 ﻿using EquipmentReservation.Application.Reservations.Data;
 using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Reservations;
-using EquipmentReservation.Infrastructure.Application.Repositories.Commons;
 using EquipmentReservation.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Application.Repositories
 {
-    public class ReservationDataQuery : QueryableRepository, IReservationDataQuery
+    public class ReservationDataQuery : IReservationDataQuery
     {
-        public ReservationDataQuery(MyDbContext dbContext) : base(dbContext) { }
+        private readonly MyDbContext _dbContext;
+
+        public ReservationDataQuery(MyDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
 
         private string GetQuery(string baseQuery, string whereClause = null)
         {
@@ -36,7 +39,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<ReservationData> FindAllReservationData()
         {
-            return QueryObjects<ReservationData>(GetQuery(GetReservationDataQuery));
+            return new QueryableRepository(_dbContext).QueryObjects<ReservationData>(GetQuery(GetReservationDataQuery));
         }
 
         public ReservationData FindReservationData(ReservationId reservationId)
@@ -45,7 +48,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
             var parameter = new { id = reservationId.Value };
 
-            return QueryObject<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), parameter);
+            return new QueryableRepository(_dbContext).QueryObject<ReservationData>(GetQuery(GetReservationDataQuery, whereClause), parameter);
         }
 
         private const string GetReservationListDataQuery = @"
@@ -71,7 +74,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
         public IEnumerable<ReservationListData> FindAllReservationListData()
         {
-            return QueryObjects<ReservationListData>(GetQuery(GetReservationListDataQuery));
+            return new QueryableRepository(_dbContext).QueryObjects<ReservationListData>(GetQuery(GetReservationListDataQuery));
         }
 
         public ReservationListData FindReservationListData(ReservationId reservationId)
@@ -80,7 +83,7 @@ namespace EquipmentReservation.Infrastructure.Application.Repositories
 
             var parameter = new { id = reservationId.Value };
 
-            return QueryObject<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), parameter);
+            return new QueryableRepository(_dbContext).QueryObject<ReservationListData>(GetQuery(GetReservationListDataQuery, whereClause), parameter);
         }
     }
 }

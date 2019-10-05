@@ -10,5 +10,6 @@ namespace EquipmentReservation.Domain.Reservations
         Reservation Find(ReservationId reservationId);
         IEnumerable<Reservation> FindByEquipmentId(EquipmentId equipmentId);
         void Save(Reservation entity);
+        void Lock();
     }
 }

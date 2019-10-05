@@ -1,15 +1,18 @@
-﻿using System;
+﻿using EquipmentReservation.Infrastructure.Database.Tables;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using EquipmentReservation.Infrastructure.Database.Tables;
-using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentReservation.Infrastructure.Database
 {
     public class MyDbContext : DbContext
     {
-        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            //options.UseSqlServer("Server=localhost;Database=EquipmentReservation;User ID=sa;Password=test!234");
+            options.UseNpgsql("Host=localhost;Username=EquipmentReservation;Password=EquipmentReservation!234;Database=EquipmentReservation");
+        }
 
         public DbSet<ACCOUNTS> Accounts { get; set; }
         public DbSet<EQUIPMENTS> Equipments { get; set; }

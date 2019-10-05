@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=EquipmentReservation
+      - POSTGRES_PASSWORD=EquipmentReservation!234
+      - POSTGRES_DB=EquipmentReservation
+    ports:
+      - 5432:5432
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+volumes:
+  database:
+    driver: local
