@@ -16,5 +16,7 @@ namespace EquipmentReservation.Infrastructure.Database.Tables
         public DateTime start_date_time { get; set; }
         public DateTime end_date_time { get; set; }
         public string purpose_of_use { get; set; }
+
+        public RESERVATIONS_STATUS reservations_status { get; set; }
     }
 }

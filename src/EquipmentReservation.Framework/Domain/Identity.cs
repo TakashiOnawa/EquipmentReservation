@@ -17,7 +17,7 @@ namespace EquipmentReservation.Framework.Domain
             Value = id;
         }
 
-        public string Value { get; private set; }
+        public string Value { get; }
 
         public override bool Equals(object obj)
         {

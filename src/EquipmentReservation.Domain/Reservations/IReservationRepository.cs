@@ -1,14 +1,12 @@
-﻿using System;
+﻿using EquipmentReservation.Domain.Equipments;
 using System.Collections.Generic;
-using System.Text;
-using EquipmentReservation.Domain.Equipments;
 
 namespace EquipmentReservation.Domain.Reservations
 {
     public interface IReservationRepository
     {
-        Reservation Find(ReservationId reservationId);
-        IEnumerable<Reservation> FindByEquipmentId(EquipmentId equipmentId);
+        Reservation Find(ReservationId reservationId, ReservationStatus? reservationStatus = null);
+        IEnumerable<Reservation> FindByEquipmentId(EquipmentId equipmentId, ReservationStatus? reservationStatus = null);
         void Save(Reservation entity);
         void Lock();
     }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EquipmentReservation.Application.Reservations.Commands;
+﻿using EquipmentReservation.Application.Reservations.Commands;
 using EquipmentReservation.Application.Reservations.Exceptions;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
+using System;
 
 namespace EquipmentReservation.Application.Reservations
 {
@@ -31,7 +29,8 @@ namespace EquipmentReservation.Application.Reservations
                     new AccountId(request.AccountId),
                     new EquipmentId(request.EquipmentId),
                     new ReservationDateTime(request.StartDateTime, request.EndDateTime),
-                    request.PurposeOfUse);
+                    request.PurposeOfUse,
+                    ReservationStatus.Reserved);
 
                 SaveReservation(reservation);
 
@@ -76,8 +75,6 @@ namespace EquipmentReservation.Application.Reservations
 
             try
             {
-                _unitOfWork.ReservationRepository.Lock();
-
                 var reservation = FindReservationWithValidation(request.ReservationId);
 
                 reservation.Cancel();
@@ -99,7 +96,7 @@ namespace EquipmentReservation.Application.Reservations
 
             if (reservation == null)
             {
-                throw new InvalidOperationException(string.Format("予約が登録されていません。 ID:{0}", reservationId));
+                throw new ReservationNotFoundException();
             }
 
             return reservation;

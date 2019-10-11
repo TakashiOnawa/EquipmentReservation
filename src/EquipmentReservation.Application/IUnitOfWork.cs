@@ -5,21 +5,15 @@ using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Application
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IAccountRepository AccountRepository { get; }
         IEquipmentRepository EquipmentRepository { get; }
         IReservationRepository ReservationRepository { get; }
         
-        IAccountDataQuery AccountDataQuery { get; }
-        IEquipmentDataQuery EquipmentDataQuery { get; }
-        IReservationDataQuery ReservationDataQuery { get; }
-
         void Begin();
         void Commit();
         void Rollback();

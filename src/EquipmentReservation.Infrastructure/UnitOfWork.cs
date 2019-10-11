@@ -1,13 +1,9 @@
 ﻿using EquipmentReservation.Application;
-using EquipmentReservation.Application.Accounts.Queries;
-using EquipmentReservation.Application.Equipments.Queries;
-using EquipmentReservation.Application.Reservations.Queries;
 using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
-using EquipmentReservation.Infrastructure.Application.Repositories;
 using EquipmentReservation.Infrastructure.Database;
-using EquipmentReservation.Infrastructure.Domain.Repositories;
+using EquipmentReservation.Infrastructure.Repositories;
 using System;
 
 namespace EquipmentReservation.Infrastructure
@@ -51,36 +47,6 @@ namespace EquipmentReservation.Infrastructure
             }
         }
 
-        private IAccountDataQuery _accountDataQuery;
-        public IAccountDataQuery AccountDataQuery
-        {
-            get
-            {
-                if (_accountDataQuery == null) _accountDataQuery = new AccountDataQuery(_dbContext);
-                return _accountDataQuery;
-            }
-        }
-
-        private IEquipmentDataQuery _equipmentDataQuery;
-        public IEquipmentDataQuery EquipmentDataQuery
-        {
-            get
-            {
-                if (_equipmentDataQuery == null) _equipmentDataQuery = new EquipmentDataQuery(_dbContext);
-                return _equipmentDataQuery;
-            }
-        }
-
-        private IReservationDataQuery _reservationDataQuery;
-        public IReservationDataQuery ReservationDataQuery
-        {
-            get
-            {
-                if (_reservationDataQuery == null) _reservationDataQuery = new ReservationDataQuery(_dbContext);
-                return _reservationDataQuery;
-            }
-        }
-
         public void Begin()
         {
             _dbContext.Database.BeginTransaction();
@@ -94,6 +60,27 @@ namespace EquipmentReservation.Infrastructure
         public void Rollback()
         {
             _dbContext.Database.RollbackTransaction();
+        }
+
+        private bool disposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                _dbContext.Dispose();
+            }
+
+            disposed = true;
         }
     }
 }

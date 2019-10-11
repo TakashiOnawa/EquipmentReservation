@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EquipmentReservation.Domain.Accounts;
+﻿using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Framework.Domain;
+using System;
 
 namespace EquipmentReservation.Domain.Reservations
 {
@@ -13,23 +11,17 @@ namespace EquipmentReservation.Domain.Reservations
             ReservationId id,
             AccountId accountId,
             EquipmentId equipmentId,
-            ReservationDateTime reservationDateTime)
+            ReservationDateTime reservationDateTime,
+            string purposeOfUse,
+            ReservationStatus reservationStatus)
         {
             Id = id;
             AccountId = accountId;
             EquipmentId = equipmentId;
             ReservationDateTime = reservationDateTime;
-        }
-
-        public Reservation(
-            ReservationId id,
-            AccountId accountId,
-            EquipmentId equipmentId,
-            ReservationDateTime reservationDateTime,
-            string purposeOfUse)
-            : this(id, accountId, equipmentId, reservationDateTime)
-        {
+            ReservationStatus = ReservationStatus.Reserved;
             PurposeOfUse = purposeOfUse;
+            ReservationStatus = reservationStatus;
         }
 
         private ReservationId _id;
@@ -87,15 +79,7 @@ namespace EquipmentReservation.Domain.Reservations
             }
         }
 
-        private bool _canceled;
-        public bool Canceled
-        {
-            get { return _canceled; }
-            private set
-            {
-                _canceled = value;
-            }
-        }
+        public ReservationStatus ReservationStatus { get; private set; }
 
         public void ChangeAccountOfUse(AccountId accountId)
         {
@@ -127,7 +111,7 @@ namespace EquipmentReservation.Domain.Reservations
 
         public void Cancel()
         {
-            _canceled = true;
+            ReservationStatus = ReservationStatus.Canceled;
         }
 
         public override bool Equals(object obj)

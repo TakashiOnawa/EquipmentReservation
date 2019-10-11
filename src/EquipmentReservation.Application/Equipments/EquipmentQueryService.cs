@@ -1,24 +1,22 @@
 ﻿using EquipmentReservation.Application.Equipments.Queries;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Application.Equipments
 {
     public class EquipmentQueryService : IEquipmentQueryService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IQueryFactory _queryFactory;
 
-        public EquipmentQueryService(IUnitOfWork unitOfWork)
+        public EquipmentQueryService(IQueryFactory queryFactory)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _queryFactory = queryFactory ?? throw new ArgumentNullException(nameof(queryFactory));
         }
 
         public GetAllEquipmentDataResponse GetAllEquipmentData()
         {
             return new GetAllEquipmentDataResponse()
             {
-                EquipmentDataList = _unitOfWork.EquipmentDataQuery.FindAllEquipmentData()
+                EquipmentDataList = _queryFactory.EquipmentDataQuery.FindAllEquipmentData()
             };
         }
     }
