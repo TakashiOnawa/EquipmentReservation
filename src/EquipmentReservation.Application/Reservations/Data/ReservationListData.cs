@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EquipmentReservation.Application.Reservations.Data
+﻿namespace EquipmentReservation.Application.Reservations.Data
 {
     public class ReservationListData : ReservationData
     {

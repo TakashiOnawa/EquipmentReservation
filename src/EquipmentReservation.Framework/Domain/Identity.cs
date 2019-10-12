@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Framework.Domain
 {
-    public abstract class Identity : IEquatable<Identity>
+    public abstract class Identity
     {
         public Identity()
         {
@@ -32,7 +31,7 @@ namespace EquipmentReservation.Framework.Domain
 
         public override int GetHashCode()
         {
-            return 2108858624 + EqualityComparer<string>.Default.GetHashCode(Value);
+            return -1937169414 + EqualityComparer<string>.Default.GetHashCode(Value);
         }
 
         public static bool operator ==(Identity identity1, Identity identity2)

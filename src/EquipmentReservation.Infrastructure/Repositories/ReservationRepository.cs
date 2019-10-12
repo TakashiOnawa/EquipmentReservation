@@ -21,50 +21,38 @@ namespace EquipmentReservation.Infrastructure.Repositories
 
         public Reservation Find(ReservationId reservationId, ReservationStatus? reservationStatus = null)
         {
-            RESERVATIONS reservation = null;
+            IQueryable<RESERVATIONS> reservations = _dbContext.Reservations.Include(_ => _.reservations_status);
 
-            if (reservationStatus == null)
+            if (reservationStatus != null)
             {
-                reservation = _dbContext.Reservations.Include(_ => _.reservations_status).
-                    SingleOrDefault(_ => _.id == reservationId.Value);
-            }
-            else
-            {
-                reservation = _dbContext.Reservations.Include(_ => _.reservations_status).
-                    Where(_ => _.reservations_status.status == (int)reservationStatus.Value).
-                    SingleOrDefault(_ => _.id == reservationId.Value);
+                reservations = reservations.Where(_ => _.reservations_status.status == (int)reservationStatus.Value);
             }
 
-            if (reservation == null) return null;
+            var reservation = reservations.SingleOrDefault(_ => _.id == reservationId.Value);
 
             return Create(reservation);
-
         }
 
         public IEnumerable<Reservation> FindByEquipmentId(EquipmentId equipmentId, ReservationStatus? reservationStatus = null)
         {
-            if (reservationStatus == null)
+            var reservations = _dbContext.Reservations.Include(_ => _.reservations_status).
+                Where(_ => _.equipments_id == equipmentId.Value);
+
+            if (reservationStatus != null)
             {
-                return _dbContext.Reservations.Include(_ => _.reservations_status).
-                    Where(_ => _.equipments_id == equipmentId.Value).
-                    Select(_ => Create(_));
+                reservations = reservations.Where(_ => _.reservations_status.status == (int)reservationStatus.Value);
             }
-            else
-            {
-                return _dbContext.Reservations.Include(_ => _.reservations_status).
-                    Where(_ => _.reservations_status.status == (int)reservationStatus.Value).
-                    Where(_ => _.equipments_id == equipmentId.Value).
-                    Select(_ => Create(_));
-            }
+
+            return reservations.Select(_ => Create(_)).ToArray();
         }
 
         public void Save(Reservation entity)
         {
             var reservation = _dbContext.Reservations.Find(entity.Id.Value);
-            var reservationExists = reservation != null;
-            if (!reservationExists)
+            if (reservation == null)
             {
                 reservation = new RESERVATIONS();
+                _dbContext.Reservations.Add(reservation);
             }
 
             reservation.id = entity.Id.Value;
@@ -74,41 +62,16 @@ namespace EquipmentReservation.Infrastructure.Repositories
             reservation.end_date_time = entity.ReservationDateTime.End;
             reservation.purpose_of_use = entity.PurposeOfUse;
 
-            if (!reservationExists)
-            {
-                _dbContext.Reservations.Add(reservation);
-            }
-            else
-            {
-                _dbContext.Reservations.Update(reservation);
-            }
-
 
             var reservationStatus = _dbContext.ReservationsStatus.Find(reservation.id);
-            var reservationStatusExists = reservationStatus != null;
-            if (!reservationStatusExists)
+            if (reservationStatus == null)
             {
                 reservationStatus = new RESERVATIONS_STATUS();
+                _dbContext.ReservationsStatus.Add(reservationStatus);
             }
 
             reservationStatus.reservations_id = reservation.id;
-            if (entity.ReservationStatus == ReservationStatus.Reserved)
-            {
-                reservationStatus.status = 0;
-            }
-            else if (entity.ReservationStatus == ReservationStatus.Canceled)
-            {
-                reservationStatus.status = 1;
-            }
-
-            if (!reservationStatusExists)
-            {
-                _dbContext.ReservationsStatus.Add(reservationStatus);
-            }
-            else
-            {
-                _dbContext.ReservationsStatus.Update(reservationStatus);
-            }
+            reservationStatus.status = (int)entity.ReservationStatus;
 
             _dbContext.SaveChanges();
         }
@@ -120,6 +83,9 @@ namespace EquipmentReservation.Infrastructure.Repositories
 
         private Reservation Create(RESERVATIONS reservation)
         {
+            if (reservation == null)
+                return null;
+
             return new Reservation(
                 new ReservationId(reservation.id),
                 new AccountId(reservation.accounts_id),

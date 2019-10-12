@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using EquipmentReservation.Application.Accounts.Data;
+﻿using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Equipments.Data;
 using EquipmentReservation.Validations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentReservation.Models
 {

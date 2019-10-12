@@ -1,8 +1,5 @@
 ﻿using EquipmentReservation.Framework.Domain;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EquipmentReservation.Domain.Reservations
 {
@@ -19,8 +16,8 @@ namespace EquipmentReservation.Domain.Reservations
         public bool IsDupulicatedReservation(Reservation reservation)
         {
             Assertion.ArgumentNotNull(reservation, nameof(reservation));
-            var reservations = _reservationRepository.FindByEquipmentId(reservation.EquipmentId);
-            return reservations.Any(_ => !_.Equals(reservation) && _.IsDupulicated(reservation));
+            var reservations = _reservationRepository.FindByEquipmentId(reservation.EquipmentId, ReservationStatus.Reserved);
+            return reservations.Where(_ => !_.Equals(reservation)).Any(_ => _.IsDupulicated(reservation));
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using EquipmentReservation.Domain.Accounts;
+using EquipmentReservation.Infrastructure.Database;
+using EquipmentReservation.Infrastructure.Database.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using EquipmentReservation.Domain.Accounts;
-using EquipmentReservation.Infrastructure.Database;
 
 namespace EquipmentReservation.Infrastructure.Repositories
 {
@@ -18,7 +18,14 @@ namespace EquipmentReservation.Infrastructure.Repositories
 
         public IEnumerable<Account> FindAll()
         {
-            return _dbContext.Accounts.Select(_ => new Account(new AccountId(_.id), _.account_name)).ToArray();
+            return _dbContext.Accounts.Select(_ => Create(_)).ToArray();
+        }
+
+        private Account Create(ACCOUNTS account)
+        {
+            return new Account(
+                new AccountId(account.id),
+                account.account_name);
         }
     }
 }

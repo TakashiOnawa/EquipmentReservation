@@ -12,7 +12,6 @@ namespace EquipmentReservation.Infrastructure.Database
     {
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            //options.UseSqlServer("Server=localhost;Database=EquipmentReservation;User ID=sa;Password=test!234");
             options.UseNpgsql("Host=localhost;Username=EquipmentReservation;Password=EquipmentReservation!234;Database=EquipmentReservation");
         }
 

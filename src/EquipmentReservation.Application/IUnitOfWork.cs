@@ -1,7 +1,4 @@
-﻿using EquipmentReservation.Application.Accounts.Queries;
-using EquipmentReservation.Application.Equipments.Queries;
-using EquipmentReservation.Application.Reservations.Queries;
-using EquipmentReservation.Domain.Accounts;
+﻿using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Domain.Reservations;
 using System;

@@ -1,8 +1,10 @@
 ﻿using EquipmentReservation.Application.Accounts.Data;
 using EquipmentReservation.Application.Accounts.Queries;
 using EquipmentReservation.Infrastructure.Database;
+using EquipmentReservation.Infrastructure.Database.Tables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EquipmentReservation.Infrastructure.Queries
 {
@@ -15,26 +17,18 @@ namespace EquipmentReservation.Infrastructure.Queries
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        private string GetQuery(string baseQuery, string whereClause = null)
+        public IEnumerable<AccountData> FindAllAccountData()
         {
-            return string.Format(baseQuery, whereClause);
+            return _dbContext.Accounts.Select(_ => CreateAccountData(_)).ToArray();
         }
 
-        private const string GetAccountDataQuery = @"
-                select
-                    id as Id,
-                    account_name as AccountName
-                from
-                    accounts
-                {0}
-                order by
-                    account_name;
-                ";
-
-        public IEnumerable<AccountData> GetAccountData()
+        private AccountData CreateAccountData(ACCOUNTS account)
         {
-            return _dbContext.QueryObjects<AccountData>(GetQuery(GetAccountDataQuery));
+            return new AccountData()
+            {
+                Id = account.id,
+                AccountName = account.account_name
+            };
         }
-
     }
 }

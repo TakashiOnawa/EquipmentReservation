@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EquipmentReservation.Application.Reservations.Data;
-using EquipmentReservation.Application.Reservations.Queries;
-using EquipmentReservation.Domain.Reservations;
+﻿using EquipmentReservation.Application.Reservations.Queries;
 
 namespace EquipmentReservation.Application.Reservations
 {

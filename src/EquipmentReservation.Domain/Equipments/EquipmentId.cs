@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EquipmentReservation.Framework.Domain;
+﻿using EquipmentReservation.Framework.Domain;
 
 namespace EquipmentReservation.Domain.Equipments
 {

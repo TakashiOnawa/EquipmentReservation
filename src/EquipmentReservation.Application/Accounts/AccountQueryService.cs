@@ -16,7 +16,7 @@ namespace EquipmentReservation.Application.Accounts
         {
             return new GetAllAccountDataResponse()
             {
-                AccountDataList = _queryFactory.AccountDataQuery.GetAccountData()
+                AccountDataList = _queryFactory.AccountDataQuery.FindAllAccountData()
             };
         }
     }

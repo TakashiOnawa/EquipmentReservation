@@ -1,9 +1,9 @@
-﻿using System;
+﻿using EquipmentReservation.Domain.Equipments;
+using EquipmentReservation.Infrastructure.Database;
+using EquipmentReservation.Infrastructure.Database.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using EquipmentReservation.Domain.Equipments;
-using EquipmentReservation.Infrastructure.Database;
 
 namespace EquipmentReservation.Infrastructure.Repositories
 {
@@ -18,7 +18,15 @@ namespace EquipmentReservation.Infrastructure.Repositories
 
         public IEnumerable<Equipment> FindAll()
         {
-            return _dbContext.Equipments.Select(_ => new Equipment(new EquipmentId(_.id), (EquipmentTypes)_.equipment_type, _.equipment_name)).ToArray();
+            return _dbContext.Equipments.Select(_ => Create(_)).ToArray();
+        }
+
+        private Equipment Create(EQUIPMENTS equipment)
+        {
+            return new Equipment(
+                new EquipmentId(equipment.id),
+                (EquipmentTypes)equipment.equipment_type,
+                equipment.equipment_name);
         }
     }
 }

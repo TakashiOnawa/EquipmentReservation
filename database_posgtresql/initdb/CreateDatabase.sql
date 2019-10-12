@@ -17,3 +17,9 @@ create table reservations (
   end_date_time timestamp not null,
   purpose_of_use varchar(255)
 );
+
+create table reservations_status (
+  reservations_id varchar(255) not null references reservations(id),
+  status int not null,
+  primary key (reservations_id)
+);

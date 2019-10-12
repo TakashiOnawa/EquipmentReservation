@@ -1,5 +1,3 @@
-using System;
-
 namespace EquipmentReservation.Models
 {
     public class ErrorViewModel

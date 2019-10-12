@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace EquipmentReservation.Infrastructure.Database.Tables
 {
@@ -17,6 +15,8 @@ namespace EquipmentReservation.Infrastructure.Database.Tables
         public DateTime end_date_time { get; set; }
         public string purpose_of_use { get; set; }
 
+        public ACCOUNTS accounts { get; set; }
+        public EQUIPMENTS equipments { get; set; }
         public RESERVATIONS_STATUS reservations_status { get; set; }
     }
 }

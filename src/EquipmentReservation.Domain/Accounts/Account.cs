@@ -1,11 +1,8 @@
 ﻿using EquipmentReservation.Framework.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentReservation.Domain.Accounts
 {
-    public class Account : IEquatable<Account>
+    public class Account
     {
         public Account(AccountId id, string name)
         {
