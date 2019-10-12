@@ -7,6 +7,5 @@ namespace EquipmentReservation.Application.Reservations
         GetReservationDataResponse GetReservationData(GetReservationDataRequest request);
 
         GetAllReservationListDataResponse GetAllReservationListData();
-        GetReservationListDataResponse GetReservationListData(GetReservationListDataRequest request);
     }
 }

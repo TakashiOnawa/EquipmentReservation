@@ -15,7 +15,6 @@ namespace EquipmentReservation.Configurations.DI
             // DB コンテキストは 「ServiceLifetime.Scoped」 にし 1 リクエスト 1 インスタンスにすることで
             // ApplicationService 間で同一のコネクションを使用できるようにする。
             services.AddDbContext<MyDbContext>(ServiceLifetime.Scoped);
-            //services.AddDbContext<MyDbContext>(options => options.UseNpgsql("Host=localhost;Username=EquipmentReservation;Password=EquipmentReservation!234;Database=EquipmentReservation"), ServiceLifetime.Scoped);
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IQueryFactory, QueryFactory>();

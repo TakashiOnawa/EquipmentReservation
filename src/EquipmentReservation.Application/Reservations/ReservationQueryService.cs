@@ -28,13 +28,5 @@ namespace EquipmentReservation.Application.Reservations
                 ReservationListDataList = _queryFactory.ReservationDataQuery.FindAllReservationListData()
             };
         }
-
-        public GetReservationListDataResponse GetReservationListData(GetReservationListDataRequest request)
-        {
-            return new GetReservationListDataResponse()
-            {
-                ReservationListData = _queryFactory.ReservationDataQuery.FindReservationListData(new ReservationId(request.ReservationId))
-            };
-        }
     }
 }
