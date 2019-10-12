@@ -1,8 +1,9 @@
 ﻿using EquipmentReservation.Framework.Domain;
+using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Accounts
 {
-    public class Account
+    public class Account : IEntity<Account>
     {
         public Account(AccountId id, string name)
         {
@@ -40,12 +41,23 @@ namespace EquipmentReservation.Domain.Accounts
 
         public bool Equals(Account other)
         {
-            return other != null && Id.Equals(other.Id);
+            return other != null &&
+                   EqualityComparer<AccountId>.Default.Equals(Id, other.Id);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return 2108858624 + EqualityComparer<AccountId>.Default.GetHashCode(Id);
+        }
+
+        public static bool operator ==(Account account1, Account account2)
+        {
+            return EqualityComparer<Account>.Default.Equals(account1, account2);
+        }
+
+        public static bool operator !=(Account account1, Account account2)
+        {
+            return !(account1 == account2);
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using EquipmentReservation.Framework.Domain;
 using System;
+using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Reservations
 {
-    public class ReservationDateTime : IEquatable<ReservationDateTime>
+    public class ReservationDateTime : IValueObject<ReservationDateTime>
     {
         public ReservationDateTime(DateTime start, DateTime end)
         {
@@ -14,15 +15,6 @@ namespace EquipmentReservation.Domain.Reservations
 
         public DateTime Start { get; }
         public DateTime End { get; }
-
-        public bool IsRangeOverlapping(ReservationDateTime other)
-        {
-            Assertion.ArgumentNotNull(other, nameof(other));
-            var compareResultStart = Start.CompareTo(other.Start);
-            var compareResultEnd = End.CompareTo(other.End);
-
-            return Start.CompareTo(other.End) < 0 && other.Start.CompareTo(End) < 0; 
-        }
 
         public override bool Equals(object obj)
         {
@@ -42,6 +34,25 @@ namespace EquipmentReservation.Domain.Reservations
             hashCode = hashCode * -1521134295 + Start.GetHashCode();
             hashCode = hashCode * -1521134295 + End.GetHashCode();
             return hashCode;
+        }
+
+        public bool IsRangeOverlapping(ReservationDateTime other)
+        {
+            Assertion.ArgumentNotNull(other, nameof(other));
+            var compareResultStart = Start.CompareTo(other.Start);
+            var compareResultEnd = End.CompareTo(other.End);
+
+            return Start.CompareTo(other.End) < 0 && other.Start.CompareTo(End) < 0; 
+        }
+
+        public static bool operator ==(ReservationDateTime time1, ReservationDateTime time2)
+        {
+            return EqualityComparer<ReservationDateTime>.Default.Equals(time1, time2);
+        }
+
+        public static bool operator !=(ReservationDateTime time1, ReservationDateTime time2)
+        {
+            return !(time1 == time2);
         }
     }
 }

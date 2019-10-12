@@ -1,11 +1,11 @@
 ﻿using EquipmentReservation.Domain.Accounts;
 using EquipmentReservation.Domain.Equipments;
 using EquipmentReservation.Framework.Domain;
-using System;
+using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Reservations
 {
-    public class Reservation : IEquatable<Reservation>
+    public class Reservation : IEntity<Reservation>
     {
         public Reservation(
             ReservationId id,
@@ -121,12 +121,23 @@ namespace EquipmentReservation.Domain.Reservations
 
         public bool Equals(Reservation other)
         {
-            return other != null && Id.Equals(other.Id);
+            return other != null &&
+                   EqualityComparer<ReservationId>.Default.Equals(Id, other.Id);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return 2108858624 + EqualityComparer<ReservationId>.Default.GetHashCode(Id);
+        }
+
+        public static bool operator ==(Reservation reservation1, Reservation reservation2)
+        {
+            return EqualityComparer<Reservation>.Default.Equals(reservation1, reservation2);
+        }
+
+        public static bool operator !=(Reservation reservation1, Reservation reservation2)
+        {
+            return !(reservation1 == reservation2);
         }
     }
 }

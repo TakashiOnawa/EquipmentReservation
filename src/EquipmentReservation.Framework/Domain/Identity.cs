@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EquipmentReservation.Framework.Domain
 {
-    public abstract class Identity
+    public abstract class Identity : IValueObject<Identity>
     {
         public Identity()
         {

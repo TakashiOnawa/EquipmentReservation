@@ -1,9 +1,9 @@
 ﻿using EquipmentReservation.Framework.Domain;
-using System;
+using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Equipments
 {
-    public class Equipment : IEquatable<Equipment>
+    public class Equipment : IEntity<Equipment>
     {
         public Equipment(EquipmentId id, EquipmentTypes equipmentType, string name)
         {
@@ -44,12 +44,23 @@ namespace EquipmentReservation.Domain.Equipments
 
         public bool Equals(Equipment other)
         {
-            return other != null && Id.Equals(other.Id);
+            return other != null &&
+                   EqualityComparer<EquipmentId>.Default.Equals(Id, other.Id);
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return 2108858624 + EqualityComparer<EquipmentId>.Default.GetHashCode(Id);
+        }
+
+        public static bool operator ==(Equipment equipment1, Equipment equipment2)
+        {
+            return EqualityComparer<Equipment>.Default.Equals(equipment1, equipment2);
+        }
+
+        public static bool operator !=(Equipment equipment1, Equipment equipment2)
+        {
+            return !(equipment1 == equipment2);
         }
     }
 }
