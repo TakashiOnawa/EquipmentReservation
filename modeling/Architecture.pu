@@ -1,0 +1,84 @@
+@startuml Architecture
+
+package EquipmentReservation.Domain
+{
+    class DomainObject
+    {
+        Entity
+        ValueObject
+    }
+    class DomainService
+    class IRepository
+
+    DomainService --> IRepository
+    DomainService --> DomainObject
+    IRepository -> DomainObject
+}
+
+package EquipmentReservation.Application
+{
+    class IApplicationService
+    class ApplicationService
+    class IQueryService
+    class QueryService
+    class IQuery
+    class IUnitOfWork
+    {
+        Begin()
+        Commit()
+        Rollback()
+    }
+    class IQueryFactory
+
+    IApplicationService <|-- ApplicationService
+    IQueryService <|-- QueryService
+
+    ApplicationService o-- IUnitOfWork
+    ApplicationService -> IRepository
+    ApplicationService -> DomainObject
+    ApplicationService -> DomainService
+
+    QueryService o-- IQueryFactory
+    QueryService --> IQuery
+
+    IUnitOfWork -> IRepository
+    IQueryFactory -> IQuery
+}
+
+package EquipmentReservation.Infrastructure
+{
+    class Repository
+    class Query
+    class UnitOfWork
+    class QueryFactory
+    class DbContext
+
+    IRepository <|-- Repository
+    IQuery <|- Query
+    IUnitOfWork <|-- UnitOfWork
+    IQueryFactory <|-- QueryFactory
+
+    Repository --> DomainObject
+    Repository --> DbContext
+
+    UnitOfWork -> Repository
+    UnitOfWork --> DbContext
+
+    QueryFactory -> Query
+    QueryFactory --> DbContext
+    Query --> DbContext
+}
+
+package EquipmentReservation
+{
+    class View
+    class Controller
+
+    View -> Controller
+    Controller -> View
+
+    Controller o-- IApplicationService
+    Controller o-- IQueryService
+}
+
+@enduml
