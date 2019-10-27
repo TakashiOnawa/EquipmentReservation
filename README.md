@@ -33,7 +33,9 @@ Database : PostgreSQL
 
 # レイヤー構造
 
-![](modeling\Architecture\Architecture.png)
+![](https://github.com/TakashiOnawa/EquipmentReservation/blob/master/modeling/Architecture/Architecture.png)
+
+
 
 ## EquipmentReservation.Domain
 
