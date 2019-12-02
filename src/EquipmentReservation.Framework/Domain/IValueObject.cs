@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace EquipmentReservation.Framework.Domain
+﻿namespace EquipmentReservation.Framework.Domain
 {
-    public interface IValueObject<T> : IEquatable<T>
+    public interface IValueObject
     {
+        bool Equals(object obj);
+        int GetHashCode();
     }
 }

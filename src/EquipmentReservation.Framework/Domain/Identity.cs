@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EquipmentReservation.Framework.Domain
 {
-    public abstract class Identity : IValueObject<Identity>
+    public abstract class Identity
     {
         public Identity()
         {
@@ -20,13 +20,9 @@ namespace EquipmentReservation.Framework.Domain
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Identity);
-        }
-
-        public bool Equals(Identity other)
-        {
-            return other != null &&
-                   Value == other.Value;
+            var identity = obj as Identity;
+            return identity != null &&
+                   Value == identity.Value;
         }
 
         public override int GetHashCode()

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Reservations
 {
-    public class Reservation : IEntity<Reservation>
+    public class Reservation : IEntity
     {
         public Reservation(
             ReservationId id,
@@ -116,13 +116,9 @@ namespace EquipmentReservation.Domain.Reservations
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Reservation);
-        }
-
-        public bool Equals(Reservation other)
-        {
-            return other != null &&
-                   EqualityComparer<ReservationId>.Default.Equals(Id, other.Id);
+            var reservation = obj as Reservation;
+            return reservation != null &&
+                   EqualityComparer<ReservationId>.Default.Equals(Id, reservation.Id);
         }
 
         public override int GetHashCode()

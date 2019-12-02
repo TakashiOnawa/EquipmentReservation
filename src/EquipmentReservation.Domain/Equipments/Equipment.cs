@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Equipments
 {
-    public class Equipment : IEntity<Equipment>
+    public class Equipment : IEntity
     {
         public Equipment(EquipmentId id, EquipmentTypes equipmentType, string name)
         {
@@ -39,13 +39,9 @@ namespace EquipmentReservation.Domain.Equipments
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Equipment);
-        }
-
-        public bool Equals(Equipment other)
-        {
-            return other != null &&
-                   EqualityComparer<EquipmentId>.Default.Equals(Id, other.Id);
+            var equipment = obj as Equipment;
+            return equipment != null &&
+                   EqualityComparer<EquipmentId>.Default.Equals(Id, equipment.Id);
         }
 
         public override int GetHashCode()

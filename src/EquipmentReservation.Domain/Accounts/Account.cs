@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EquipmentReservation.Domain.Accounts
 {
-    public class Account : IEntity<Account>
+    public class Account : IEntity
     {
         public Account(AccountId id, string name)
         {
@@ -36,13 +36,9 @@ namespace EquipmentReservation.Domain.Accounts
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Account);
-        }
-
-        public bool Equals(Account other)
-        {
-            return other != null &&
-                   EqualityComparer<AccountId>.Default.Equals(Id, other.Id);
+            var account = obj as Account;
+            return account != null &&
+                   EqualityComparer<AccountId>.Default.Equals(Id, account.Id);
         }
 
         public override int GetHashCode()
