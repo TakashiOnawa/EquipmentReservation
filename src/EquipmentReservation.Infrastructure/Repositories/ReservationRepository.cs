@@ -60,7 +60,7 @@ namespace EquipmentReservation.Infrastructure.Repositories
             reservation.equipments_id = entity.EquipmentId.Value;
             reservation.start_date_time = entity.ReservationDateTime.Start;
             reservation.end_date_time = entity.ReservationDateTime.End;
-            reservation.purpose_of_use = entity.PurposeOfUse;
+            reservation.purpose_of_use = entity.PurposeOfUse.Value;
 
 
             var reservationStatus = _dbContext.ReservationsStatus.Find(reservation.id);
@@ -91,7 +91,7 @@ namespace EquipmentReservation.Infrastructure.Repositories
                 new AccountId(reservation.accounts_id),
                 new EquipmentId(reservation.equipments_id),
                 new ReservationDateTime(reservation.start_date_time, reservation.end_date_time),
-                reservation.purpose_of_use,
+                new PurposeOfUse(reservation.purpose_of_use),
                 (ReservationStatus)reservation.reservations_status.status);
         }
     }

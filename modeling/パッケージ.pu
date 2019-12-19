@@ -1,0 +1,14 @@
+@startuml
+
+object EquipmentReservation <<ビュー層>>
+object EquipmentReservation.Domain <<ドメイン層>>
+object EquipmentReservation.Application <<アプリケーション層>>
+object EquipmentReservation.Infrastructure <<インフラ層>>
+
+EquipmentReservation.Infrastructure --> EquipmentReservation.Domain
+EquipmentReservation.Application --> EquipmentReservation.Domain
+EquipmentReservation.Infrastructure --> EquipmentReservation.Application
+EquipmentReservation --> EquipmentReservation.Application
+EquipmentReservation --> EquipmentReservation.Infrastructure
+
+@enduml

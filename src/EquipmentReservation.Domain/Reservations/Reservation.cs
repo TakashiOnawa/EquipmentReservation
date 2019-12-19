@@ -12,7 +12,7 @@ namespace EquipmentReservation.Domain.Reservations
             AccountId accountId,
             EquipmentId equipmentId,
             ReservationDateTime reservationDateTime,
-            string purposeOfUse,
+            PurposeOfUse purposeOfUse,
             ReservationStatus reservationStatus)
         {
             Id = id;
@@ -68,13 +68,13 @@ namespace EquipmentReservation.Domain.Reservations
             }
         }
 
-        private string _purposeOfUse;
-        public string PurposeOfUse
+        private PurposeOfUse _purposeOfUse;
+        public PurposeOfUse PurposeOfUse
         {
             get { return _purposeOfUse; }
             private set
             {
-                Assertion.ArgumentRange(value, 64, nameof(PurposeOfUse));
+                Assertion.ArgumentNotNull(value, nameof(PurposeOfUse));
                 _purposeOfUse = value;
             }
         }
@@ -96,7 +96,7 @@ namespace EquipmentReservation.Domain.Reservations
             ReservationDateTime = reservationDateTime;
         }
 
-        public void ChangePurposeOfUse(string purposeOfUse)
+        public void ChangePurposeOfUse(PurposeOfUse purposeOfUse)
         {
             PurposeOfUse = purposeOfUse;
         }

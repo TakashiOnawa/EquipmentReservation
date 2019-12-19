@@ -29,7 +29,7 @@ namespace EquipmentReservation.Application.Reservations
                     new AccountId(request.AccountId),
                     new EquipmentId(request.EquipmentId),
                     new ReservationDateTime(request.StartDateTime, request.EndDateTime),
-                    request.PurposeOfUse,
+                    new PurposeOfUse(request.PurposeOfUse),
                     ReservationStatus.Reserved);
 
                 SaveReservation(reservation);
@@ -56,7 +56,7 @@ namespace EquipmentReservation.Application.Reservations
                 reservation.ChangeAccountOfUse(new AccountId(request.AccountId));
                 reservation.ChangeEquipment(new EquipmentId(request.EquipmentId));
                 reservation.ChangeReservationDateTime(new ReservationDateTime(request.StartDateTime, request.EndDateTime));
-                reservation.ChangePurposeOfUse(request.PurposeOfUse);
+                reservation.ChangePurposeOfUse(new PurposeOfUse(request.PurposeOfUse));
 
                 SaveReservation(reservation);
 
